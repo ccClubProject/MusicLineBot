@@ -38,15 +38,15 @@ conn.commit()
 
 def find_concert(table_name, keyword):
     df = pd.read_sql(f"SELECT * FROM {table_name} WHERE Name LIKE '%{keyword}%'", conn)
-    concert_name = df['Name']
+    concert_name = df['Name'].to_string()
     return concert_name
 
 def find_time(table_name, keyword):
     df = pd.read_sql(f"SELECT * FROM {table_name} WHERE Time LIKE '%{keyword}%'", conn)
     return df
 
-jazz = find_concert('ACCUPASS','爵士')
-print(jazz)
+# jazz = find_concert('ACCUPASS','爵士')
+# print(jazz)
 
 
 # Close the cursor
