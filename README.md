@@ -5,7 +5,7 @@ This is a linebot where users can search live music events based on given time a
 https://docs.render.com/deploy-flask
 
 ## 檔案說明
-- requirements.txt > 此app會需要安裝的套件
+- requirements.txt > 此app會需要安裝的套件（可在終端機使用 pip freeze > requirements.txt 得到所需套件）
 - app.py > 跑的主程式(flask, linebot)
 
 ## Steps
