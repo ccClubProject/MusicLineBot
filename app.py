@@ -33,7 +33,7 @@ def callback():
 def handle_message(event):
     if event.message.text.lower() == "live music":
         buttons_template = ButtonsTemplate(
-            title='選擇日期和時間',
+            title='選擇日期',
             text='請選擇',
             actions=[
                 DatetimePickerTemplateAction(
@@ -41,16 +41,16 @@ def handle_message(event):
                     data='action=sel_date',
                     mode='date'
                 ),
-                DatetimePickerTemplateAction(
-                    label='選擇時間',
-                    data='action=sel_time',
-                    mode='time'
-                ),
-                DatetimePickerTemplateAction(
-                    label='選擇日期和時間',
-                    data='action=sel_datetime',
-                    mode='datetime'
-                ),
+                # DatetimePickerTemplateAction(
+                #     label='選擇時間',
+                #     data='action=sel_time',
+                #     mode='time'
+                # ),
+                # DatetimePickerTemplateAction(
+                #     label='選擇日期和時間',
+                #     data='action=sel_datetime',
+                #     mode='datetime'
+                # ),
                 PostbackTemplateAction(
                     label='不指定',
                     data='action=no_date'
@@ -73,10 +73,10 @@ def handle_postback(event):
     data = event.postback.data
     if 'action=sel_date' in data:
         response_text = f"您選擇的日期是：{event.postback.params['date']}"
-    elif 'action=sel_time' in data:
-        response_text = f"您選擇的時間是：{event.postback.params['time']}"
-    elif 'action=sel_datetime' in data:
-        response_text = f"您選擇的日期和時間是：{event.postback.params['datetime']}"
+    # elif 'action=sel_time' in data:
+    #     response_text = f"您選擇的時間是：{event.postback.params['time']}"
+    # elif 'action=sel_datetime' in data:
+    #     response_text = f"您選擇的日期和時間是：{event.postback.params['datetime']}"
     elif 'action=no_date' in data:
         response_text = "您選擇了不指定日期"
     else:
