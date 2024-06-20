@@ -1,27 +1,17 @@
-import sqlite3
 import os
 from flask import Flask, request, abort
-from linebot.v3 import WebhookHandler
-from linebot.v3.exceptions import InvalidSignatureError
-from linebot.v3.messaging import (
-    Configuration,
-    ApiClient,
-    MessagingApi,
-    ReplyMessageRequest,
-    TextMessage,
-)
-from linebot.v3.models import (
-    MessageEvent, TextMessage as LineTextMessage, TextSendMessage, TemplateSendMessage,
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import (
+    MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage,
     ButtonsTemplate, DatetimePickerTemplateAction, PostbackEvent, PostbackTemplateAction
 )
-from linebot.v3.webhooks import MessageEvent, TextMessageContent
 
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
 channel_secret = os.environ.get('channel_secret')
-configuration = Configuration(access_token=channel_access_token)
+line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
-line_bot_api = MessagingApi(api_client=ApiClient(configuration=configuration))
 
 # 所有從line來的事件都會先經過此，再轉為下方的handler做進一步的處理
 @app.route("/callback", methods=['POST'])
@@ -39,7 +29,7 @@ def callback():
         abort(400)
     return 'OK'
 
-@handler.add(MessageEvent, message=LineTextMessage)
+@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text.lower() == "live music":
         buttons_template = ButtonsTemplate(
@@ -99,5 +89,3 @@ def handle_postback(event):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-    
