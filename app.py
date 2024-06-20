@@ -1,4 +1,5 @@
 import os
+import re
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
@@ -7,7 +8,6 @@ from linebot.models import (
     ButtonsTemplate, DatetimePickerTemplateAction, PostbackEvent, PostbackTemplateAction,
     MessageAction, QuickReply, QuickReplyButton
 )
-import re
 
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
@@ -35,7 +35,7 @@ def callback():
 def handle_message(event):
     if event.message.text.lower() == "live music":
         buttons_template = ButtonsTemplate(
-            title='選擇日期',
+            title='選擇日期和時間',
             text='請選擇',
             actions=[
                 DatetimePickerTemplateAction(
@@ -43,16 +43,6 @@ def handle_message(event):
                     data='action=sel_date',
                     mode='date'
                 ),
-                # DatetimePickerTemplateAction(
-                #     label='選擇時間',
-                #     data='action=sel_time',
-                #     mode='time'
-                # ),
-                # DatetimePickerTemplateAction(
-                #     label='選擇日期和時間',
-                #     data='action=sel_datetime',
-                #     mode='datetime'
-                # ),
                 PostbackTemplateAction(
                     label='不指定',
                     data='action=no_date'
@@ -65,32 +55,25 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, template_message)
     else:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=event.message.text)
-        )
+        handle_location_message(event)  # 處理地理位置的邏輯
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
     data = event.postback.data
     if 'action=sel_date' in data:
         response_text = f"您選擇的日期是：{event.postback.params['date']}"
-    # elif 'action=sel_time' in data:
-    #     response_text = f"您選擇的時間是：{event.postback.params['time']}"
-    # elif 'action=sel_datetime' in data:
-    #     response_text = f"您選擇的日期和時間是：{event.postback.params['datetime']}"
     elif 'action=no_date' in data:
         response_text = "不指定"
     else:
         response_text = "未知的動作"
 
-    # 回复日期选择信息
+    # 回覆日期選擇訊息
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=response_text)
     )
 
-    # 询问地理位置
+    # 詢問地理位置
     buttons_template = ButtonsTemplate(
         title='想找哪個地區呢？',
         text='暫不支援離島地區',
@@ -119,7 +102,6 @@ def handle_postback(event):
     )
     line_bot_api.reply_message(event.reply_token, template_message)
 
-@handler.add(MessageEvent, message=TextMessage)
 def handle_location_message(event):
     message = event.message.text
     if re.match('北部', message):
