@@ -40,7 +40,7 @@ def handle_message(event):
             actions=[
                 DatetimePickerTemplateAction(
                     label='選擇日期',
-                    data='action=sel_date',
+                    data='action=sel_date&mode=date',
                     mode='date'
                 ),
                 PostbackTemplateAction(
@@ -77,11 +77,6 @@ def handle_postback(event):
     )
 
     # 詢問地理位置
-    
-    template_message = TemplateSendMessage(
-        alt_text='選擇地區',
-        template=buttons_template
-    )
     buttons_template = ButtonsTemplate(
         title='想找哪個地區呢？',
         text='暫不支援離島地區',
@@ -104,7 +99,10 @@ def handle_postback(event):
             )
         ]
     )
-    
+    template_message = TemplateSendMessage(
+        alt_text='選擇地區',
+        template=buttons_template
+    )
     line_bot_api.reply_message(event.reply_token, template_message)
 
 @handler.add(MessageEvent, message=TextMessage)
