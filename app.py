@@ -1,5 +1,4 @@
 import os
-import re
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
@@ -8,6 +7,7 @@ from linebot.models import (
     ButtonsTemplate, DatetimePickerTemplateAction, PostbackEvent, PostbackTemplateAction,
     MessageAction, QuickReply, QuickReplyButton
 )
+import re
 
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
@@ -35,7 +35,7 @@ def callback():
 def handle_message(event):
     if event.message.text.lower() == "live music":
         buttons_template = ButtonsTemplate(
-            title='選擇日期和時間',
+            title='選擇日期',
             text='請選擇',
             actions=[
                 DatetimePickerTemplateAction(
@@ -55,7 +55,10 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, template_message)
     else:
-        handle_location_message(event)  # 處理地理位置的邏輯
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=event.message.text)
+        )
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
@@ -67,13 +70,18 @@ def handle_postback(event):
     else:
         response_text = "未知的動作"
 
-    # 回覆日期選擇訊息
+    # 回覆日期
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=response_text)
     )
 
     # 詢問地理位置
+    
+    template_message = TemplateSendMessage(
+        alt_text='選擇地區',
+        template=buttons_template
+    )
     buttons_template = ButtonsTemplate(
         title='想找哪個地區呢？',
         text='暫不支援離島地區',
@@ -96,12 +104,10 @@ def handle_postback(event):
             )
         ]
     )
-    template_message = TemplateSendMessage(
-        alt_text='選擇地區',
-        template=buttons_template
-    )
+    
     line_bot_api.reply_message(event.reply_token, template_message)
 
+@handler.add(MessageEvent, message=TextMessage)
 def handle_location_message(event):
     message = event.message.text
     if re.match('北部', message):
