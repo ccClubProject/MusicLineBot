@@ -40,7 +40,7 @@ def handle_message(event):
             actions=[
                 DatetimePickerTemplateAction(
                     label='選擇日期',
-                    data='action=sel_date&mode=date',
+                    data='action=sel_date',
                     mode='date'
                 ),
                 PostbackTemplateAction(
@@ -150,3 +150,4 @@ def handle_location_message(event):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
