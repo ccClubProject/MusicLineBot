@@ -66,7 +66,7 @@ def handle_postback(event):
     # 準備回覆的訊息，包括選擇日期的回覆和地區選擇按鈕
     buttons_template = ButtonsTemplate(
         title='想找哪個地區呢？',
-        text='暫不支援離島地區',
+        text='請選擇地區',
         actions=[
             MessageAction(
                 label='北部',
@@ -81,8 +81,8 @@ def handle_postback(event):
                 text='南部'
             ),
             MessageAction(
-                label='東部',
-                text='東部'
+                label='東部&離島',
+                text='東部&離島'
             )
         ]
     )
@@ -134,10 +134,13 @@ def handle_location_message(event):
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
     elif re.match('東部', message):
-        flex_message = TextSendMessage(text='你在東部的哪個縣市呢？',
+        flex_message = TextSendMessage(text='你在東部&離島的哪個縣市呢？',
                                        quick_reply=QuickReply(items=[
                                            QuickReplyButton(action=PostbackTemplateAction(label="花蓮縣", text="花蓮縣", data='B&花蓮縣')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="台東縣", text="台東縣", data='B&台東縣'))
+                                           QuickReplyButton(action=PostbackTemplateAction(label="台東縣", text="台東縣", data='B&台東縣')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="澎湖縣", text="澎湖縣", data='B&澎湖縣')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="金門縣", text="金門縣", data='B&金門縣')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="連江縣", text="連江縣", data='B&連江縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
     else:
