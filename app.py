@@ -52,35 +52,6 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, template_message)
 
-#關鍵字搜尋
-    elif re.match('找', message):
-        search = message.replace("找", "").strip()
-        search_word = search.encode("utf-8")
-        search_url_indievox = f"https://www.indievox.com/activity/list/{urllib.parse.quote(search_word)}"
-        search_url_kktix = f"https://kktix.com/events?utf8=%E2%9C%93&search={urllib.parse.quote(search_word)}&start_at=2024%2F06%2F22"
-        search_url_accupass = f"https://www.accupass.com/search?q={urllib.parse.quote(search_word)}"
-        search_url_tixcraft = f"https://tixcraft.com/activity/{urllib.parse.quote(search_word)}"
-        confirm_message = TemplateSendMessage(
-            alt_text='點擊連結前往搜尋結果',
-            template=ButtonsTemplate(
-                title=f"{search}搜尋結果出爐！",
-                text=f"點擊按鈕看{search}有哪些好活動",
-                actions=[
-                    URIAction(
-                        label='馬上前往iNDEIVOX',
-                        uri=search_url_indievox),
-                    URIAction(
-                        label='馬上前往kktix',
-                        uri=search_url_kktix),
-                    URIAction(
-                        label='馬上前往Accupass',
-                        uri=search_url_accupass),
-                    URIAction(
-                        label='馬上前往Tixcraft',
-                        uri=search_url_tixcraft)
-                ]))
-        line_bot_api.reply_message(event.reply_token, confirm_message)
-
     else:
         handle_location_message(event)
 
@@ -174,6 +145,36 @@ def handle_location_message(event):
                                            QuickReplyButton(action=PostbackTemplateAction(label="連江縣", text="連江縣", data='B&連江縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
+
+    #關鍵字搜尋
+    elif re.match('找', message):
+        search = message.replace("找", "").strip()
+        search_word = search.encode("utf-8")
+        search_url_indievox = f"https://www.indievox.com/activity/list/{urllib.parse.quote(search_word)}"
+        search_url_kktix = f"https://kktix.com/events?utf8=%E2%9C%93&search={urllib.parse.quote(search_word)}&start_at=2024%2F06%2F22"
+        search_url_accupass = f"https://www.accupass.com/search?q={urllib.parse.quote(search_word)}"
+        search_url_tixcraft = f"https://tixcraft.com/activity/{urllib.parse.quote(search_word)}"
+        confirm_message = TemplateSendMessage(
+            alt_text='點擊連結前往搜尋結果',
+            template=ButtonsTemplate(
+                title=f"{search}搜尋結果出爐！",
+                text=f"點擊按鈕看{search}有哪些好活動",
+                actions=[
+                    URIAction(
+                        label='馬上前往iNDEIVOX',
+                        uri=search_url_indievox),
+                    URIAction(
+                        label='馬上前往kktix',
+                        uri=search_url_kktix),
+                    URIAction(
+                        label='馬上前往Accupass',
+                        uri=search_url_accupass),
+                    URIAction(
+                        label='馬上前往Tixcraft',
+                        uri=search_url_tixcraft)
+                ]))
+        line_bot_api.reply_message(event.reply_token, confirm_message)
+
     else:
         # 對於其他消息簡單回覆
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
