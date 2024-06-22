@@ -1,12 +1,13 @@
 import os
 import re
+import urllib.parse
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage,
     ButtonsTemplate, DatetimePickerTemplateAction, PostbackEvent,
-    PostbackTemplateAction, MessageAction, QuickReply, QuickReplyButton
+    PostbackTemplateAction, MessageAction, QuickReply, QuickReplyButton,URIAction
 )
 
 app = Flask(__name__)
@@ -50,6 +51,36 @@ def handle_message(event):
             template=buttons_template
         )
         line_bot_api.reply_message(event.reply_token, template_message)
+
+#關鍵字搜尋
+    elif re.match('找', message):
+        search = message.replace("找", "").strip()
+        search_word = search.encode("utf-8")
+        search_url_indievox = f"https://www.indievox.com/activity/list/{urllib.parse.quote(search_word)}"
+        search_url_kktix = f"https://kktix.com/events?utf8=%E2%9C%93&search={urllib.parse.quote(search_word)}&start_at=2024%2F06%2F22"
+        search_url_accupass = f"https://www.accupass.com/search?q={urllib.parse.quote(search_word)}"
+        search_url_tixcraft = f"https://tixcraft.com/activity/{urllib.parse.quote(search_word)}"
+        confirm_message = TemplateSendMessage(
+            alt_text='點擊連結前往搜尋結果',
+            template=ButtonsTemplate(
+                title=f"{search}搜尋結果出爐！",
+                text=f"點擊按鈕看{search}有哪些好活動",
+                actions=[
+                    URIAction(
+                        label='馬上前往iNDEIVOX',
+                        uri=search_url_indievox),
+                    URIAction(
+                        label='馬上前往kktix',
+                        uri=search_url_kktix),
+                    URIAction(
+                        label='馬上前往Accupass',
+                        uri=search_url_accupass),
+                    URIAction(
+                        label='馬上前往Tixcraft',
+                        uri=search_url_tixcraft)
+                ]))
+        line_bot_api.reply_message(event.reply_token, confirm_message)
+
     else:
         handle_location_message(event)
 
@@ -60,8 +91,8 @@ def handle_postback(event):
         response_text = f"您選擇的日期是：{event.postback.params['date']}"
     elif 'action=no_date' in data:
         response_text = "不指定"
-    # else:
-    #     response_text = "未知的動作"
+    else:
+        response_text = "未知的動作"
 
     # 準備回覆的訊息，包括選擇日期的回覆和地區選擇按鈕
     buttons_template = ButtonsTemplate(
@@ -149,3 +180,5 @@ def handle_location_message(event):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
