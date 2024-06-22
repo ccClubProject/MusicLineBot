@@ -1,4 +1,5 @@
 import os
+import re
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
@@ -7,7 +8,6 @@ from linebot.models import (
     ButtonsTemplate, DatetimePickerTemplateAction, PostbackEvent,
     PostbackTemplateAction, MessageAction, QuickReply, QuickReplyButton
 )
-import re
 
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
@@ -106,7 +106,6 @@ def handle_postback(event):
         ]
     )
 
-@handler.add(MessageEvent, message=TextMessage)
 def handle_location_message(event):
     message = event.message.text
     if re.match('北部', message):
@@ -151,4 +150,6 @@ def handle_location_message(event):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
 
