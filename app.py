@@ -60,8 +60,8 @@ def handle_postback(event):
         response_text = f"您選擇的日期是：{event.postback.params['date']}"
     elif 'action=no_date' in data:
         response_text = "不指定"
-    else:
-        response_text = "未知的動作"
+    # else:
+    #     response_text = "未知的動作"
 
     # 準備回覆的訊息，包括選擇日期的回覆和地區選擇按鈕
     buttons_template = ButtonsTemplate(
