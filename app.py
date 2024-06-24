@@ -148,6 +148,18 @@ def handle_location_message(event):
                                            QuickReplyButton(action=PostbackTemplateAction(label="連江縣", text="連江縣", data='B&連江縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
+    # 新版關鍵字搜尋（進DB query活動名稱欄位)
+    elif re.match('找', message):
+        search = message.replace("找", "").strip()
+        search_word = search.encode("utf-8")
+        search_result = get_data(search_word)
+        if len(search_result) != 0:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
+        else:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
+    else:
+        # 對於其他消息簡單回覆
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
 
 '''
 舊版關鍵字搜尋，都先註解掉
@@ -181,19 +193,6 @@ def handle_location_message(event):
         line_bot_api.reply_message(event.reply_token, confirm_message)
 '''
 
-    # 新版關鍵字搜尋（進DB query活動名稱欄位）
-    elif re.match('找', message):
-        search = message.replace("找", "").strip()
-        search_word = search.encode("utf-8")
-        search_result = get_data(search_word)
-        if len(search_result) != 0:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
-        else:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
-
-    else:
-        # 對於其他消息簡單回覆
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
 
 # 當py檔案被直接執行時，__name__變數會是__main__，因此當此條件成立時，代表程式被當作主程式執行，而不是被當作模組引用。
 if __name__ == "__main__":
