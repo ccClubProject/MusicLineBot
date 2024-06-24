@@ -7,7 +7,7 @@ import sys
 # 不知為何正常import他抓不到，所以用os去指定路徑
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from accupass import scrap_accupass
+from scraping.accupass import scrap_accupass
 
 # 給定DB及schema路徑
 SQLITE_DB_PATH = './backend/scraped.db'
@@ -33,7 +33,7 @@ def create_table():
     conn.execute("PRAGMA foreign_keys = ON")
 
     # 將accupass爬蟲資料存入DB
-    df.to_sql('ACCUPASS', conn, if_exists='append', index=False)
+    df.to_sql('tb_accupass', conn, if_exists='append', index=False)
 
 
 # 讀取資料庫資料
@@ -42,8 +42,10 @@ def get_data(keyword):
      db = sqlite3.connect(SQLITE_DB_PATH)
      cursor = db.cursor()
 
-     # 根據關鍵字找尋特定資料
-     cursor.execute(f"SELECT EventName FROM 'ACCUPASS' WHERE EventName LIKE '%{keyword}%'")
+     # 根據關鍵字找尋特定資料，並返回EventName欄位
+     cursor.execute(f"SELECT EventName FROM 'tb_accupass' WHERE EventName LIKE '%{keyword}%'")
      data = cursor.fetchall()
      return str(data)
 
+# # create_table()
+# print(get_data('爵士'))
