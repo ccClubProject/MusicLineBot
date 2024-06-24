@@ -152,7 +152,7 @@ def handle_location_message(event):
     elif re.match('找', message):
         keyword = message.replace("找", "").strip()
         search_result = get_data(keyword)
-        if len(search_result) != 0:
+        if len(search_result) != 2:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
         else:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
