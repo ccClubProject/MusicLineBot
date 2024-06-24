@@ -4,11 +4,7 @@ import urllib.parse
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage,
-    ButtonsTemplate, DatetimePickerTemplateAction, PostbackEvent,
-    PostbackTemplateAction, MessageAction, QuickReply, QuickReplyButton,URIAction
-)
+from linebot.models import *
 
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
@@ -179,7 +175,8 @@ def handle_location_message(event):
         # 對於其他消息簡單回覆
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
 
+# 當py檔案被直接執行時，__name__變數會是__main__，因此當此條件成立時，代表程式被當作主程式執行，而不是被當作模組引用。
 if __name__ == "__main__":
-    app.run(debug=True)
-
+    # port = int(os.environ.get('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=5000)
 
