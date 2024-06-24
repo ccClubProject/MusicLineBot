@@ -12,13 +12,14 @@ https://docs.render.com/deploy-flask
 - backend/scraped.db > DB本身（存取爬蟲資料）
 - scraping/accupass.py > accupass爬蟲程式
 
-## Deploy Steps (正常情況下使用web services即可)
+## Deploy Steps (正常情況下使用python跑即可)
 1. Render > Deploy Web Services > Connect to your Github repo
 2. Deploy 設定都留預設即可
 3. 複製左上角網址，最後面要加上/callback (e.g. https://xxxx.onrender.com/callback)
 4. 到Line Developer > Messaging API > 更改 Webhook URL
 5. 只要你的repo有commit change, render會自動 re-deploy<br>
-<b>因為有使用selenium，所以用docker deploy，會需要dockerfile去建置所需環境（如：安裝chrome driver)</b>
+
+<b>因為有使用selenium，所以Language使用docker deploy，會需要dockerfile去建置所需環境（如：安裝chrome driver)</b>
 
 ## Render Env Variable
 - 建議把較機密的資訊如API Key, DB URL存到Render env varialbe而不是放在code裡
