@@ -1,3 +1,4 @@
+import sqlite3
 import os
 import re
 import urllib.parse
@@ -6,11 +7,17 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
 
+# 引入backend資料庫相關自訂模組
+from backend.build import *
+
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
 channel_secret = os.environ.get('channel_secret')
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
+
+# 使用backend模組，將爬蟲資料存進table
+create_table()
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -142,6 +149,8 @@ def handle_location_message(event):
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
 
+'''
+舊版關鍵字搜尋，都先註解掉
     #關鍵字搜尋
     elif re.match('找', message):
         search = message.replace("找", "").strip()
@@ -170,6 +179,17 @@ def handle_location_message(event):
                         uri=search_url_tixcraft)
                 ]))
         line_bot_api.reply_message(event.reply_token, confirm_message)
+'''
+
+    # 新版關鍵字搜尋（進DB query活動名稱欄位）
+    elif re.match('找', message):
+        search = message.replace("找", "").strip()
+        search_word = search.encode("utf-8")
+        search_result = get_data(search_word)
+        if len(search_result) != 0:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
+        else:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
 
     else:
         # 對於其他消息簡單回覆
