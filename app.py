@@ -63,35 +63,63 @@ def handle_message(event):
 def handle_postback(event):
     data = event.postback.data
     if 'action=sel_date' in data:
-        response_text = f"您選擇的日期是：{event.postback.params['date']}"
+        selected_date = event.postback.params['date']
+        response_text = f"您選擇的日期是：{selected_date}"
+        state = 'date_selected'
     elif 'action=no_date' in data:
-        response_text = "不指定"
+        selected_date = None
+        response_text = "不指定日期"
+        state = 'date_not_selected'
     else:
         response_text = "未知的動作"
-
-    # 準備回覆的訊息，包括選擇日期的回覆和地區選擇按鈕
-    buttons_template = ButtonsTemplate(
-        title='想找哪個地區呢？',
-        text='請選擇地區',
-        actions=[
-            MessageAction(
-                label='北部',
-                text='北部'
-            ),
-            MessageAction(
-                label='中部',
-                text='中部'
-            ),
-            MessageAction(
-                label='南部',
-                text='南部'
-            ),
-            MessageAction(
-                label='東部&離島',
-                text='東部&離島'
-            )
-        ]
-    )
+        state = None
+    
+    if state == 'date_selected':
+        buttons_template = ButtonsTemplate(
+            title='想找哪個地區呢？',
+            text='請選擇地區',
+            actions=[
+                MessageAction(
+                    label='北部',
+                    text=f'北部&{selected_date}'
+                ),
+                MessageAction(
+                    label='中部',
+                    text=f'中部&{selected_date}'
+                ),
+                MessageAction(
+                    label='南部',
+                    text=f'南部&{selected_date}'
+                ),
+                MessageAction(
+                    label='東部&離島',
+                    text=f'東部&{selected_date}'
+                )
+            ]
+        )
+    else:
+        buttons_template = ButtonsTemplate(
+            title='想找哪個地區呢？',
+            text='請選擇地區',
+            actions=[
+                MessageAction(
+                    label='北部',
+                    text='北部'
+                ),
+                MessageAction(
+                    label='中部',
+                    text='中部'
+                ),
+                MessageAction(
+                    label='南部',
+                    text='南部'
+                ),
+                MessageAction(
+                    label='東部&離島',
+                    text='東部&離島'
+                )
+            ]
+        )
     template_message = TemplateSendMessage(
         alt_text='選擇地區',
         template=buttons_template
@@ -198,4 +226,3 @@ def handle_location_message(event):
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=True, host='0.0.0.0', port=port)
-
