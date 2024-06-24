@@ -6,6 +6,7 @@ from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
+import json
 
 # 引入backend資料庫相關自訂模組
 from backend.build import *
