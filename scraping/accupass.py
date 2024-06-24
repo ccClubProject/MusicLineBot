@@ -27,12 +27,12 @@ def scrap_accupass():
     driver = webdriver.Chrome(options=option)
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=option)
 
-    url = 'https://www.accupass.com/search?c=music&q=演唱會&s=relevance'
+    url = 'https://www.accupass.com/search?c=music&s=relevance'
     driver.get(url)
     driver.implicitly_wait(10) # 等待伺服器反應最多 10 秒，如果在時間到之前反應就提早結束等待
 
     # 捲動到底三次
-    for i in range(3):
+    for i in range(10):
         driver.find_element('css selector', 'html').send_keys(Keys.END)
         time.sleep(3)
 
@@ -99,15 +99,23 @@ def scrap_accupass():
             guests_per_event = '、'.join(guests_per_event)
             artists.append(guests_per_event)
 
-
+    # 把各個資料list使用pandas存成dataframe
     accupass_df = pd.DataFrame(list(zip(event_name,event_user_time,venue,address,artists,img_link,event_link,start_time,end_time)), columns = ['EventName', 'EventTime', 'Venue', 'Address', 'Artists', 'ImageURL', 'PageURL', 'StartTime', 'EndTime'])
     # print(accupass_df)
 
-    # 篩選活動名稱
-    filter_name = ['演唱會','音樂會','音樂之夜','巡迴','獨奏會','演出','派對']
+    # 因為accupass音樂分類會有很多非演出活動，因此用關鍵字篩選活動名稱
+    filter_name = ['演唱會','音樂會','音樂之夜','巡迴','獨奏會','演出','派對','歌謠祭','專場','巡演','Open Jam','演奏會','音樂夜']
 
-    # "|" means OR in pandas
+    # 用活動名稱篩選出合適的活動，並存成filter dataframe （"|" means OR in pandas）
     filter_df = accupass_df.query(f'EventName.str.contains("|".join({filter_name}))', engine = 'python')
+
+    # 有一個長期活動不符合，先找出他的index
+    index_to_drop = filter_df[filter_df['EventName'] == '音樂進站-台北捷運音樂演出計畫 (邀你來表演)'].index
+
+    # 再使用index把該筆資料從df移除
+    filter_df = filter_df.drop(index=index_to_drop)
 
     return filter_df
 
+# 匯出csv檔案，可在local檢查用
+# scrap_accupass().to_csv('accupass.csv',index=True)
