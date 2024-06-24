@@ -150,9 +150,8 @@ def handle_location_message(event):
         line_bot_api.reply_message(event.reply_token, flex_message)
     # 新版關鍵字搜尋（進DB query活動名稱欄位)
     elif re.match('找', message):
-        search = message.replace("找", "").strip()
-        search_word = search.encode("utf-8")
-        search_result = get_data(search_word)
+        keyword = message.replace("找", "").strip()
+        search_result = get_data(keyword)
         if len(search_result) != 0:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
         else:
