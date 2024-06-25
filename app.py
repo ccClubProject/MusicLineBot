@@ -17,9 +17,6 @@ channel_secret = os.environ.get('channel_secret')
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-# 使用backend模組，將爬蟲資料存進table
-create_table()
-
 @app.route("/callback", methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
@@ -132,6 +129,9 @@ def handle_postback(event):
             template_message
         ]
     )
+
+# 使用backend模組，將爬蟲資料存進table
+create_table()
 
 def handle_location_message(event):
     message = event.message.text
