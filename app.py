@@ -132,7 +132,7 @@ def create_bubble(event):
                                             "type": "text",
                                             "text": "展演地點",
                                             "color": "#ffffff",
-                                            ""flex": 0,
+                                            "flex": 0,
                         "offsetTop": "-2px",
                         "margin": "sm"
                       },
