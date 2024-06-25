@@ -47,5 +47,21 @@ def get_data(keyword):
      data = cursor.fetchall()
      return str(data)
 
+# 讀取資料庫資料(日期和地點)
+def get_random_music_events(date, location):
+     # 建立DB連線
+     db = sqlite3.connect(SQLITE_DB_PATH)
+     cursor = db.cursor()
+
+     # 根據日期和地點尋特定資料，並返回結果
+     query = """
+     SELECT StartTime, EndTime, Address 
+     FROM tb_accupass 
+     WHERE DATE(StartTime) = ? AND Address LIKE ?
+     """
+     cursor.execute(query, (date, f'%{location}%'))
+     data = cursor.fetchall()
+     return data
+
 # # create_table()
 # print(get_data('爵士'))
