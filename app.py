@@ -1,3 +1,180 @@
+#flex message JSON檔
+def create_bubble(event):
+    bubble_template = {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "image",
+                    "url": event[6],
+                    "size": "full",
+                    "aspectMode": "cover",
+                    "aspectRatio": "2:3.5",
+                    "gravity": "top"
+                },
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": event[1],
+                                    "size": "xl",
+                                    "color": "#ffffff",
+                                    "weight": "bold"
+                                }
+                            ],
+                            "spacing": "none"
+                        },
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": event[8],
+                                    "color": "#ebebeb",
+                                    "size": "md",
+                                    "flex": 0
+                                }
+                            ],
+                            "spacing": "none",
+                            "margin": "xs"
+                        },
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": event[3],
+                                    "color": "#ffffff",
+                                    "weight": "regular"
+                                }
+                            ],
+                            "spacing": "none",
+                            "margin": "xs"
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "filler"
+                                },
+                                {
+                                    "type": "box",
+                                    "layout": "baseline",
+                                    "contents": [
+                                        {
+                                            "type": "filler"
+                                        },
+                                        {
+                                            "type": "icon",
+                                            "url": "https://i.imgur.com/McOT6MH.png",
+                                            "margin": "none"
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": "購票去",
+                                            "color": "#ffffff",
+                                            "flex": 0,
+                                            "offsetTop": "-2px",
+                                            "margin": "md"
+                                        },
+                                        {
+                                            "type": "filler"
+                                        }
+                                    ],
+                                    "spacing": "sm"
+                                },
+                                {
+                                    "type": "filler"
+                                }
+                            ],
+                            "borderWidth": "1px",
+                            "cornerRadius": "4px",
+                            "spacing": "md",
+                            "borderColor": "#ffffff",
+                            "margin": "xl",
+                            "height": "40px",
+                            "action": {
+                                "type": "uri",
+                                "label": "action",
+                                "uri": event[7]
+                            }
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "filler"
+                                },
+                                {
+                                    "type": "box",
+                                    "layout": "baseline",
+                                    "contents": [
+                                        {
+                                            "type": "filler"
+                                        },
+                                        {
+                                            "type": "icon",
+                                            "url": "https://i.imgur.com/QAg1q20.png"
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": "展演地點",
+                                            "color": "#ffffff",
+                                            ""flex": 0,
+                        "offsetTop": "-2px",
+                        "margin": "sm"
+                      },
+                      {
+                        "type": "filler"
+                      }
+                    ],
+                    "spacing": "sm"
+                  },
+                  {
+                    "type": "filler"
+                  }
+                ],
+                "borderWidth": "1px",
+                "cornerRadius": "4px",
+                "spacing": "md",
+                "borderColor": "#ffffff",
+                "margin": "lg",
+                "height": "40px",
+                "action": {
+                  "type": "uri",
+                  "label": "action",
+                  "uri": "https://maps.app.goo.gl/Ney2hjkBrUsjLqdV7"
+                }
+              }
+            ],
+            "position": "absolute",
+            "offsetBottom": "0px",
+            "offsetStart": "0px",
+            "offsetEnd": "0px",
+            "backgroundColor": "#3D3D3Dcc",
+            "paddingAll": "20px",
+            "paddingTop": "18px"
+          }
+        ],
+        "paddingAll": "0px"
+      },
+      "size": "kilo"
+    }
+
+    return bubble_template
+
 import sqlite3
 import os
 import re
@@ -16,6 +193,9 @@ channel_access_token = os.environ.get('channel_access_token')
 channel_secret = os.environ.get('channel_secret')
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
+
+# 使用backend模組，將爬蟲資料存進table
+create_table()
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -89,8 +269,8 @@ def handle_postback(event):
                     text=f'南部&{selected_date}'
                 ),
                 MessageAction(
-                    label='東部&離島',
-                    text=f'東部&{selected_date}'
+                    label='東部及離島',
+                    text=f'東部及離島&{selected_date}'
                 )
             ]
         )
@@ -112,8 +292,8 @@ def handle_postback(event):
                     text='南部'
                 ),
                 MessageAction(
-                    label='東部&離島',
-                    text='東部&離島'
+                    label='東部及離島',
+                    text='東部及離島'
                 )
             ]
         )
@@ -129,9 +309,6 @@ def handle_postback(event):
             template_message
         ]
     )
-
-# 使用backend模組，將爬蟲資料存進table
-create_table()
 
 def handle_location_message(event):
     message = event.message.text
@@ -177,6 +354,28 @@ def handle_location_message(event):
                                            QuickReplyButton(action=PostbackTemplateAction(label="連江縣", text="連江縣", data='B&連江縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
+
+    #從資料庫推薦符合日期和地點的活動
+    elif '&' in message:
+        location, date = message.split('&')
+        music_events = get_random_music_events(date, location)
+        if music_events:
+            bubbles = []
+            for event in music_events:
+                bubble = create_bubble(event)
+                bubbles.append(bubble)
+            flex_message = FlexSendMessage(
+                alt_text='推薦的音樂表演',
+                contents={
+                    'type': 'carousel',
+                    'contents': bubbles
+                }
+            )
+            line_bot_api.reply_message(event.reply_token, flex_message)
+        else:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="'查無此活動！換個日期地點吧！"))
+
+
     # 新版關鍵字搜尋（進DB query活動名稱欄位)
     elif re.match('找', message):
         keyword = message.replace("找", "").strip()
@@ -189,37 +388,7 @@ def handle_location_message(event):
         # 對於其他消息簡單回覆
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
 
-'''
-舊版關鍵字搜尋，都先註解掉
-    #關鍵字搜尋
-    elif re.match('找', message):
-        search = message.replace("找", "").strip()
-        search_word = search.encode("utf-8")
-        search_url_indievox = f"https://www.indievox.com/activity/list/{urllib.parse.quote(search_word)}"
-        search_url_kktix = f"https://kktix.com/events?utf8=%E2%9C%93&search={urllib.parse.quote(search_word)}&start_at=2024%2F06%2F22"
-        search_url_accupass = f"https://www.accupass.com/search?q={urllib.parse.quote(search_word)}"
-        search_url_tixcraft = f"https://tixcraft.com/activity/{urllib.parse.quote(search_word)}"
-        confirm_message = TemplateSendMessage(
-            alt_text='點擊連結前往搜尋結果',
-            template=ButtonsTemplate(
-                title=f"{search}搜尋結果出爐！",
-                text=f"點擊按鈕看{search}有哪些好活動",
-                actions=[
-                    URIAction(
-                        label='馬上前往iNDEIVOX',
-                        uri=search_url_indievox),
-                    URIAction(
-                        label='馬上前往kktix',
-                        uri=search_url_kktix),
-                    URIAction(
-                        label='馬上前往Accupass',
-                        uri=search_url_accupass),
-                    URIAction(
-                        label='馬上前往Tixcraft',
-                        uri=search_url_tixcraft)
-                ]))
-        line_bot_api.reply_message(event.reply_token, confirm_message)
-'''
+
 
 
 # 當py檔案被直接執行時，__name__變數會是__main__，因此當此條件成立時，代表程式被當作主程式執行，而不是被當作模組引用。
