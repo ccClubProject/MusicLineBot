@@ -17,8 +17,6 @@ channel_secret = os.environ.get('channel_secret')
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-selected_date = None
-
 # 使用backend模組，將爬蟲資料存進table
 create_table()
 
