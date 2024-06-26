@@ -58,9 +58,9 @@ def handle_message(event):
             line_bot_api.reply_message(event.reply_token, template_message)
     
         elif event.message.packageId == 11538 and event.message.stickerId == 51626499:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='right sticker')
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='right sticker'))
     except:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='fail')
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='fail'))
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
