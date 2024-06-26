@@ -123,17 +123,3 @@ def search_tracks_by_genre(genre, token):
         return []
 
 token = get_token()
-
-# # 使用新的搜尋函數
-# genre_to_search = input("請填入音樂類型:")
-# tracks = search_tracks_by_genre(genre_to_search, token)
-#
-# for track in tracks:
-#     print(track)
-    # artist_info = get_track_info(track['id'], token)
-    # if artist_info:
-    #     artist_name = artist_info['name']
-    #     genres = artist_info.get('genres', [])
-    #     print(f"曲目: {track['name']} by {artist_name} 類型: {', '.join(genres)}")
-    # else:
-    #     print(f"曲目: {track['name']} by Unknown Artist")
