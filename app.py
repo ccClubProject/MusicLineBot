@@ -17,6 +17,8 @@ channel_secret = os.environ.get('channel_secret')
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
+selected_date = None
+
 # 使用backend模組，將爬蟲資料存進table
 # create_table()
 
@@ -34,6 +36,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    global selected_date
     message = event.message.text
     if re.match("live music", message): 
         buttons_template = ButtonsTemplate(
@@ -130,6 +133,7 @@ def handle_message(event):
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
+    global selected_date
     data = event.postback.data
     if 'action=sel_date' in data:
         selected_date = event.postback.params['date']
