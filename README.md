@@ -41,18 +41,18 @@ https://github.com/line/line-bot-sdk-python/tree/master
 https://developers.line.biz/en/reference/messaging-api/#webhook-event-objects
 
 - **Template系列**：傳訊息line先做好的template，有不同Template可用，Buttons, Confirm等等
-https://developers.line.biz/en/reference/messaging-api/#template-messages
+https://developers.line.biz/en/reference/messaging-api/#template-messages<br>
 https://github.com/line/line-bot-sdk-python/blob/master/linebot/models/template.py#L72
 
 - **Actions系列**：每個template可以搭配不同action使用，比如讓使用者選日期、打開網址等等
-https://developers.line.biz/en/reference/messaging-api/#action-objects
+https://developers.line.biz/en/reference/messaging-api/#action-objects<br>
 https://github.com/line/line-bot-sdk-python/blob/master/linebot/models/actions.py#L180
 
 - **SendMessage系列**：看想要傳給使用者什麼樣的訊息使用，有各種不同LocationSendMessage、AudioSendMessage等等
-https://developers.line.biz/en/docs/messaging-api/message-types/#page-title
+https://developers.line.biz/en/docs/messaging-api/message-types/#page-title<br>
 https://github.com/line/line-bot-sdk-python/blob/master/linebot/models/send_messages.py
 
-### Code
+### Code解釋
 ```
 @handler.add(MessageEvent, message=Message)
 # Flask 處理訊息的路由，這裏為只要是MessageEvent（使用者傳訊息）就走這條路處理，且不限message種類。
