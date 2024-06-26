@@ -9,7 +9,7 @@ from linebot.models import *
 import json
 
 # 引入backend資料庫相關自訂模組
-from backend.build import *
+# from backend.build import *
 
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
@@ -18,7 +18,7 @@ line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
 # 使用backend模組，將爬蟲資料存進table
-create_table()
+# create_table()
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -109,64 +109,49 @@ def handle_postback(event):
 
 
 def handle_location_message(event):
-    global selected_date
     message = event.message.text
-
     if re.match('北部', message):
         flex_message = TextSendMessage(text='你在北部的哪個縣市呢？',
                                        quick_reply=QuickReply(items=[
-                                           QuickReplyButton(action=PostbackTemplateAction(label="台北市", text="台北市", data=f'台北市&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="新北市", text="新北市", data=f'新北市&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="基隆市", text="基隆市", data=f'基隆市&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="桃園市", text="桃園市", data=f'桃園市&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="新竹市", text="新竹市", data=f'新竹市&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="新竹縣", text="新竹縣", data=f'新竹縣&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="宜蘭縣", text="宜蘭縣", data=f'宜蘭縣&date={selected_date}'))
+                                           QuickReplyButton(action=PostbackTemplateAction(label="台北市", text="台北市", data='B&台北市')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="新北市", text="新北市", data='B&新北市')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="基隆市", text="基隆市", data='B&基隆市')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="桃園市", text="桃園市", data='B&桃園市')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="新竹市", text="新竹市", data='B&新竹市')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="新竹縣", text="新竹縣", data='B&新竹縣')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="宜蘭縣", text="宜蘭縣", data='B&宜蘭縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
     elif re.match('中部', message):
         flex_message = TextSendMessage(text='你在中部的哪個縣市呢？',
                                        quick_reply=QuickReply(items=[
-                                           QuickReplyButton(action=PostbackTemplateAction(label="苗栗縣", text="苗栗縣", data=f'苗栗縣&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="台中市", text="台中市", data=f'台中市&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="彰化縣", text="彰化縣", data=f'彰化縣&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="南投縣", text="南投縣", data=f'南投縣&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="雲林縣", text="雲林縣", data=f'雲林縣&date={selected_date}'))
+                                           QuickReplyButton(action=PostbackTemplateAction(label="苗栗縣", text="苗栗縣", data='B&苗栗縣')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="台中市", text="台中市", data='B&台中市')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="彰化縣", text="彰化縣", data='B&彰化縣')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="南投縣", text="南投縣", data='B&南投縣')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="雲林縣", text="雲林縣", data='B&雲林縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
     elif re.match('南部', message):
         flex_message = TextSendMessage(text='你在南部的哪個縣市呢？',
                                        quick_reply=QuickReply(items=[
-                                           QuickReplyButton(action=PostbackTemplateAction(label="高雄市", text="高雄市", data=f'高雄市&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="台南市", text="台南市", data=f'台南市&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="嘉義市", text="嘉義市", data=f'嘉義市&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="嘉義縣", text="嘉義縣", data=f'嘉義縣&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="屏東縣", text="屏東縣", data=f'屏東縣&date={selected_date}'))
+                                           QuickReplyButton(action=PostbackTemplateAction(label="高雄市", text="高雄市", data='B&高雄市')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="台南市", text="台南市", data='B&台南市')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="嘉義市", text="嘉義市", data='B&嘉義市')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="嘉義縣", text="嘉義縣", data='B&嘉義縣')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="屏東縣", text="屏東縣", data='B&屏東縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
     elif re.match('東部', message):
         flex_message = TextSendMessage(text='你在東部&離島的哪個縣市呢？',
                                        quick_reply=QuickReply(items=[
-                                           QuickReplyButton(action=PostbackTemplateAction(label="花蓮縣", text="花蓮縣", data=f'花蓮縣&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="台東縣", text="台東縣", data=f'台東縣&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="澎湖縣", text="澎湖縣", data=f'澎湖縣&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="金門縣", text="金門縣", data=f'金門縣&date={selected_date}')),
-                                           QuickReplyButton(action=PostbackTemplateAction(label="連江縣", text="連江縣", data=f'連江縣&date={selected_date}'))
+                                           QuickReplyButton(action=PostbackTemplateAction(label="花蓮縣", text="花蓮縣", data='B&花蓮縣')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="台東縣", text="台東縣", data='B&台東縣')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="澎湖縣", text="澎湖縣", data='B&澎湖縣')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="金門縣", text="金門縣", data='B&金門縣')),
+                                           QuickReplyButton(action=PostbackTemplateAction(label="連江縣", text="連江縣", data='B&連江縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
-
-    @handler.add(PostbackEvent)
-    def handle_postback_location(event):
-        data = event.postback.data
-        if 'date=' in data:
-            location, date = data.split('&date=')
-            events = get_random_music_events(date, location)
-            if events:
-                events_text = '\n'.join([f"活動開始時間: {event[0]}, 活動結束時間: {event[1]}, 地址: {event[2]}" for event in events])
-            else:
-                events_text = "沒有找到符合的活動。"
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=events_text))
-
     '''
     # 新版關鍵字搜尋（進DB query活動名稱欄位)
     elif re.match('找', message):
