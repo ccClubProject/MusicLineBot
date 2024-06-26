@@ -39,7 +39,7 @@ def handle_message(event):
     elif event.message.keywords == "Hello":
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='hello'))
     elif event.message.type == "sticker":
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text='sticker'))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='sticker'))
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='fail'))
 
