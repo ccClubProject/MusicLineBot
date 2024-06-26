@@ -27,14 +27,17 @@ https://docs.render.com/deploy-flask
 
 ## LineBot
 ### 文件
-- [Line Developer Document]([url](https://developers.line.biz/en/reference/messaging-api/)) 主要是白話的介紹跟json file
-- [Line Python SDK]([url](https://github.com/line/line-bot-sdk-python/tree/master)) 主要的程式碼，因為python會有固定的命名方式，所以有時json的變數名稱會跟python不同，要以sdk為主
+- Line Developer Document 主要是白話的介紹跟json file <br> 
+https://developers.line.biz/en/reference/messaging-api/
+- Line Python SDK 主要的程式碼，因為python會有固定的命名方式，所以有時json的變數名稱會跟python不同，要以sdk為主<br>
+https://github.com/line/line-bot-sdk-python/tree/master
+
 - ChatGPT：看不懂就直接請他解釋 超好用XD
 
 ### 簡單說明
 以下包含line官方文件跟sdk code本身（可確認參數名字）
 - **Event系列**：使用者做的動作（傳訊息、加入離開等）
-- 我們主要用到就是Message Event（使用者傳訊息）、Postback event （使用者做postback action，例如：選擇日期時間）<br>
+  <br> 我們主要用到就是Message Event（使用者傳訊息）、Postback event （使用者做postback action，例如：選擇日期時間）<br>
 https://developers.line.biz/en/reference/messaging-api/#webhook-event-objects
 
 - **Template系列**：傳訊息line先做好的template，有不同Template可用，Buttons, Confirm等等
