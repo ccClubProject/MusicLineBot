@@ -161,10 +161,11 @@ def handle_location_message(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
         else:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
+    '''
     else:
         # 對於其他消息簡單回覆
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
-    '''
+
 
 '''
 舊版關鍵字搜尋，都先註解掉
