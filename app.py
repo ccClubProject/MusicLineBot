@@ -133,31 +133,6 @@ def handle_postback(event):
         ]
     )
 
-'''
-以下是跟Music_event_template串接
-待處理:
-*要等選完日期地點，進到DB抓完資料，回傳串列後執行判斷
-
-#推薦展演活動，回傳Bubbles
-@handler.add(MessageEvent, message=TextMessage)
-def handle_recommend_event(event):
-    message = event.message.text
-    if *要等選完日期地點，進到DB抓完資料，回傳串列後執行判斷
-        message = event_carousel('推薦展演結果', image_url_table, event_name_table, date_table, location_table, page_url_table, google_url_table)
-        line_bot_api.reply_message(event.reply_token, message)
-
-#當展演活動大於10個，需要推薦更多
-@handler.add(PostbackEvent)
-def handle_postback(event):
-    data = event.postback.data
-    if data.startswith('show_more'):
-        _, start_index = data.split(',')
-        start_index = int(start_index)
-        message = event_carousel('推薦展演結果', image_url_table, event_name_table, date_table, location_table, page_url_table, google_url_table, start_index=start_index)
-        line_bot_api.reply_message(event.reply_token, message)
-'''
-
-
 def handle_location_message(event):
     message = event.message.text
     if re.match('北部', message):
@@ -202,6 +177,33 @@ def handle_location_message(event):
                                            QuickReplyButton(action=PostbackTemplateAction(label="連江縣", text="連江縣", data='B&連江縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
+    
+    
+'''
+以下是嘗試跟Music_event_template串接
+待處理:
+*要等選完日期地點，進到DB抓完資料，回傳串列後執行判斷
+
+#推薦展演活動，回傳Bubbles
+@handler.add(MessageEvent, message=TextMessage)
+def handle_recommend_event(event):
+    message = event.message.text
+    if *要等選完日期地點，進到DB抓完資料，回傳串列後執行判斷
+        message = event_carousel('推薦展演結果', image_url_table, event_name_table, date_table, location_table, page_url_table, google_url_table)
+        line_bot_api.reply_message(event.reply_token, message)
+
+#當展演活動大於10個，需要推薦更多
+@handler.add(PostbackEvent)
+def handle_postback(event):
+    data = event.postback.data
+    if data.startswith('show_more'):
+        _, start_index = data.split(',')
+        start_index = int(start_index)
+        message = event_carousel('推薦展演結果', image_url_table, event_name_table, date_table, location_table, page_url_table, google_url_table, start_index=start_index)
+        line_bot_api.reply_message(event.reply_token, message)
+'''   
+    
+    
     '''
     # 新版關鍵字搜尋（進DB query活動名稱欄位)
     elif re.match('找', message):
