@@ -65,61 +65,35 @@ def handle_postback(event):
     if 'action=sel_date' in data:
         selected_date = event.postback.params['date']
         response_text = f"您選擇的日期是：{selected_date}"
-        state = 'date_selected'
     elif 'action=no_date' in data:
         selected_date = None
-        response_text = "不指定日期"
-        state = 'date_not_selected'
+        response_text = "不指定"
     else:
         response_text = "未知的動作"
-        state = None
     
-    if state == 'date_selected':
-        buttons_template = ButtonsTemplate(
-            title='想找哪個地區呢？',
-            text='請選擇地區',
-            actions=[
-                MessageAction(
-                    label='北部',
-                    text=f'北部&{selected_date}'
-                ),
-                MessageAction(
-                    label='中部',
-                    text=f'中部&{selected_date}'
-                ),
-                MessageAction(
-                    label='南部',
-                    text=f'南部&{selected_date}'
-                ),
-                MessageAction(
-                    label='東部&離島',
-                    text=f'東部&{selected_date}'
-                )
-            ]
-        )
-    else:
-        buttons_template = ButtonsTemplate(
-            title='想找哪個地區呢？',
-            text='請選擇地區',
-            actions=[
-                MessageAction(
-                    label='北部',
-                    text='北部'
-                ),
-                MessageAction(
-                    label='中部',
-                    text='中部'
-                ),
-                MessageAction(
-                    label='南部',
-                    text='南部'
-                ),
-                MessageAction(
-                    label='東部&離島',
-                    text='東部&離島'
-                )
-            ]
-        )
+    buttons_template = ButtonsTemplate(
+        title='想找哪個地區呢？',
+        text='請選擇地區',
+        actions=[
+            MessageAction(
+                label='北部',
+                text='北部'
+            ),
+            MessageAction(
+                label='中部',
+                text='中部'
+            ),
+            MessageAction(
+                label='南部',
+                text='南部'
+            ),
+            MessageAction(
+                label='東部及離島',
+                text='東部及離島'
+            )
+        ]
+    )
+    
     template_message = TemplateSendMessage(
         alt_text='選擇地區',
         template=buttons_template
