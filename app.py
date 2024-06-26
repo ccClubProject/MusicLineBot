@@ -32,7 +32,7 @@ def callback():
         abort(400)
     return 'OK'
 
-@handler.add(MessageEvent, message=StickerMessage)
+@handler.add(MessageEvent, message=Sticker)
 def handle_message(event):
     try:
         if event.message.text.lower() == "live music":
@@ -57,8 +57,10 @@ def handle_message(event):
             )
             line_bot_api.reply_message(event.reply_token, template_message)
     
-        elif event.message.packageId == 11538 and event.message.stickerId == 51626499:
+        elif event.message.packageId == "11538" and event.message.stickerId == "51626499":
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='right sticker'))
+        elif event.message.keywords == "Hello":
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='hello'))
     except:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='fail'))
 
