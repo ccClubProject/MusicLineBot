@@ -17,8 +17,6 @@ channel_secret = os.environ.get('channel_secret')
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-selected_date = None
-
 # 使用backend模組，將爬蟲資料存進table
 # create_table()
 
@@ -36,9 +34,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global selected_date
-    message = event.message.text
-    if re.match("live music", message): 
+    if event.message.text.lower() == "live music":
         buttons_template = ButtonsTemplate(
             title='選擇日期',
             text='請選擇',
@@ -60,7 +56,48 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, template_message)
 
-    elif re.match(f"{selected_date}", message) or re.match("不指定", message):
+    else:
+        handle_location_message(event)
+
+@handler.add(PostbackEvent)
+def handle_postback(event):
+    data = event.postback.data
+    if 'action=sel_date' in data:
+        selected_date = event.postback.params['date']
+        response_text = f"您選擇的日期是：{selected_date}"
+        state = 'date_selected'
+    elif 'action=no_date' in data:
+        selected_date = None
+        response_text = "不指定日期"
+        state = 'date_not_selected'
+    else:
+        response_text = "未知的動作"
+        state = None
+    
+    if state == 'date_selected':
+        buttons_template = ButtonsTemplate(
+            title='想找哪個地區呢？',
+            text='請選擇地區',
+            actions=[
+                MessageAction(
+                    label='北部',
+                    text=f'北部&{selected_date}'
+                ),
+                MessageAction(
+                    label='中部',
+                    text=f'中部&{selected_date}'
+                ),
+                MessageAction(
+                    label='南部',
+                    text=f'南部&{selected_date}'
+                ),
+                MessageAction(
+                    label='東部&離島',
+                    text=f'東部&{selected_date}'
+                )
+            ]
+        )
+    else:
         buttons_template = ButtonsTemplate(
             title='想找哪個地區呢？',
             text='請選擇地區',
@@ -78,13 +115,28 @@ def handle_message(event):
                     text='南部'
                 ),
                 MessageAction(
-                    label='東部及離島',
-                    text='東部及離島'
+                    label='東部&離島',
+                    text='東部&離島'
                 )
             ]
         )
+    template_message = TemplateSendMessage(
+        alt_text='選擇地區',
+        template=buttons_template
+    )
 
-    elif re.match('北部', message):
+    # 合併兩個回覆為一個
+    line_bot_api.reply_message(
+        event.reply_token, [
+            TextSendMessage(text=response_text),
+            template_message
+        ]
+    )
+
+
+def handle_location_message(event):
+    message = event.message.text
+    if re.match('北部', message):
         flex_message = TextSendMessage(text='你在北部的哪個縣市呢？',
                                        quick_reply=QuickReply(items=[
                                            QuickReplyButton(action=PostbackTemplateAction(label="台北市", text="台北市", data='B&台北市')),
@@ -116,8 +168,8 @@ def handle_message(event):
                                            QuickReplyButton(action=PostbackTemplateAction(label="屏東縣", text="屏東縣", data='B&屏東縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
-    elif re.match('東部及離島', message):
-        flex_message = TextSendMessage(text='你在東部及離島的哪個縣市呢？',
+    elif re.match('東部', message):
+        flex_message = TextSendMessage(text='你在東部&離島的哪個縣市呢？',
                                        quick_reply=QuickReply(items=[
                                            QuickReplyButton(action=PostbackTemplateAction(label="花蓮縣", text="花蓮縣", data='B&花蓮縣')),
                                            QuickReplyButton(action=PostbackTemplateAction(label="台東縣", text="台東縣", data='B&台東縣')),
@@ -126,34 +178,6 @@ def handle_message(event):
                                            QuickReplyButton(action=PostbackTemplateAction(label="連江縣", text="連江縣", data='B&連江縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
-    
-    else:
-        pass
-        
-
-@handler.add(PostbackEvent)
-def handle_postback(event):
-    global selected_date
-    data = event.postback.data
-    if 'action=sel_date' in data:
-        selected_date = event.postback.params['date']
-        response_text = f"{selected_date}"
-    elif 'action=no_date' in data:
-        selected_date = None
-        response_text = "不指定"
-    else:
-        pass
-    
-    
-    line_bot_api.reply_message(
-        event.reply_token, [
-            TextSendMessage(text=response_text),
-            template_message
-        ]
-    )
-
-
-    
     '''
     # 新版關鍵字搜尋（進DB query活動名稱欄位)
     elif re.match('找', message):
