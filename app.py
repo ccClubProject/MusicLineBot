@@ -152,6 +152,10 @@ def handle_location_message(event):
                                            QuickReplyButton(action=PostbackTemplateAction(label="連江縣", text="連江縣", data='B&連江縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
+    else:
+        # 對於其他消息簡單回覆
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
+    
     '''
     # 新版關鍵字搜尋（進DB query活動名稱欄位)
     elif re.match('找', message):
@@ -162,9 +166,6 @@ def handle_location_message(event):
         else:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
     '''
-    else:
-        # 對於其他消息簡單回覆
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
 
 
 '''
@@ -198,7 +199,6 @@ def handle_location_message(event):
                 ]))
         line_bot_api.reply_message(event.reply_token, confirm_message)
 '''
-
 
 # 當py檔案被直接執行時，__name__變數會是__main__，因此當此條件成立時，代表程式被當作主程式執行，而不是被當作模組引用。
 if __name__ == "__main__":
