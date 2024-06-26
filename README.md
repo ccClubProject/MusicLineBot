@@ -24,3 +24,36 @@ https://docs.render.com/deploy-flask
 ## Render Env Variable
 - 建議把較機密的資訊如API Key, DB URL存到Render env varialbe而不是放在code裡
 - https://docs.render.com/configure-environment-variables
+
+## LineBot
+
+```
+# 處理訊息的路由，這裏為只要是MessageEvent（使用者傳訊息）就走這條路處理，且不限message種類。
+# 例如如果是 (MessageEvent, message=StickerMessage) 那只有當使用者傳貼圖的時候，他才會走下面的邏輯判斷。
+@handler.add(MessageEvent, message=Message)
+
+def handle_message(event):
+    if event.message.text.lower() == "live music":
+        buttons_template = ButtonsTemplate(
+            title='選擇日期',
+            text='請選擇',
+            actions=[
+                DatetimePickerTemplateAction(
+                    label='選擇日期',
+                    data='action=sel_date',
+                    mode='date'
+                ),
+                PostbackTemplateAction(
+                    label='不指定',
+                    data='action=no_date'
+                )
+            ]
+        )
+        template_message = TemplateSendMessage(
+            alt_text='選擇日期和時間',
+            template=buttons_template
+        )
+
+        line_bot_api.reply_message(event.reply_token, template_message)
+
+```
