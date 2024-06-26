@@ -26,18 +26,52 @@ https://docs.render.com/deploy-flask
 - https://docs.render.com/configure-environment-variables
 
 ## LineBot
+### 文件
+- [Line Developer Document]([url](https://developers.line.biz/en/reference/messaging-api/)) 主要是白話的介紹跟json file
+- [Line Python SDK]([url](https://github.com/line/line-bot-sdk-python/tree/master)) 主要的程式碼，因為python會有固定的命名方式，所以有時json的變數名稱會跟python不同，要以sdk為主
+- ChatGPT：看不懂就直接請他解釋 超好用XD
 
+### 簡單說明
+以下包含line官方文件跟sdk code本身（可確認參數名字）
+- **Event系列**：使用者做的動作（傳訊息、加入離開等）
+- 我們主要用到就是Message Event（使用者傳訊息）、Postback event （使用者做postback action，例如：選擇日期時間）<br>
+https://developers.line.biz/en/reference/messaging-api/#webhook-event-objects
+
+- **Template系列**：傳訊息line先做好的template，有不同Template可用，Buttons, Confirm等等
+https://developers.line.biz/en/reference/messaging-api/#template-messages
+https://github.com/line/line-bot-sdk-python/blob/master/linebot/models/template.py#L72
+
+- **Actions系列**：每個template可以搭配不同action使用，比如讓使用者選日期、打開網址等等
+https://developers.line.biz/en/reference/messaging-api/#action-objects
+https://github.com/line/line-bot-sdk-python/blob/master/linebot/models/actions.py#L180
+
+- **SendMessage系列**：看想要傳給使用者什麼樣的訊息使用，有各種不同LocationSendMessage、AudioSendMessage等等
+https://developers.line.biz/en/docs/messaging-api/message-types/#page-title
+https://github.com/line/line-bot-sdk-python/blob/master/linebot/models/send_messages.py
+
+### Code
 ```
-# 處理訊息的路由，這裏為只要是MessageEvent（使用者傳訊息）就走這條路處理，且不限message種類。
-# 例如如果是 (MessageEvent, message=StickerMessage) 那只有當使用者傳貼圖的時候，他才會走下面的邏輯判斷。
 @handler.add(MessageEvent, message=Message)
+# Flask 處理訊息的路由，這裏為只要是MessageEvent（使用者傳訊息）就走這條路處理，且不限message種類。
+# 例如如果是 (MessageEvent, message=**StickerMessage**) 那只有當使用者傳貼圖的時候，他才會走下面的邏輯判斷。
+# Event可以理解是使用者做的動作，像傳訊息MessageEvent,也有JoinEvent等（使用者把帳號加到群組），PostbackEvent（當使用者選取日期時間等等）
+
 
 def handle_message(event):
+
+    # event.message.text 是取得使用者傳的訊息
+
     if event.message.text.lower() == "live music":
+
+        # 這裡用的是buttons template，也有不同template可用
+        # 設定buttons template裡面的變數，詳細有什麼attribute可設定要參考sdk官方文件
         buttons_template = ButtonsTemplate(
             title='選擇日期',
             text='請選擇',
-            actions=[
+
+        # 定義按鈕做的動作，有不同動作可用
+        # 為什麼是這樣寫要參考sdk文件
+            actions=[ 
                 DatetimePickerTemplateAction(
                     label='選擇日期',
                     data='action=sel_date',
@@ -49,11 +83,15 @@ def handle_message(event):
                 )
             ]
         )
+
+        # 這裡是用TemplateSendMessage去傳訊息給使用者（再包buttons)，也有傳貼圖、傳地點等（StickerSendMessage、LocationSendMessage）
         template_message = TemplateSendMessage(
             alt_text='選擇日期和時間',
             template=buttons_template
         )
 
+        # 回覆使用者用的，event.reply_token是帶token（認證）、第二個變數就是你要回傳的訊息
+        # 只可使用一次（例如想要回使用者兩句話，不能複製兩行來使用）
         line_bot_api.reply_message(event.reply_token, template_message)
 
 ```
