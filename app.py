@@ -9,13 +9,16 @@ from linebot.models import *
 import json
 
 # 引入backend資料庫相關自訂模組
-from backend.build import *
+# from backend.build import *
 
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
 channel_secret = os.environ.get('channel_secret')
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
+
+# 使用backend模組，將爬蟲資料存進table
+# create_table()
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -130,8 +133,6 @@ def handle_postback(event):
         ]
     )
 
-# 使用backend模組，將爬蟲資料存進table
-create_table()
 
 def handle_location_message(event):
     message = event.message.text
@@ -177,6 +178,7 @@ def handle_location_message(event):
                                            QuickReplyButton(action=PostbackTemplateAction(label="連江縣", text="連江縣", data='B&連江縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
+    '''
     # 新版關鍵字搜尋（進DB query活動名稱欄位)
     elif re.match('找', message):
         keyword = message.replace("找", "").strip()
@@ -188,6 +190,7 @@ def handle_location_message(event):
     else:
         # 對於其他消息簡單回覆
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
+    '''
 
 '''
 舊版關鍵字搜尋，都先註解掉
