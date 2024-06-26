@@ -32,7 +32,7 @@ def callback():
         abort(400)
     return 'OK'
 
-@handler.add(MessageEvent, message=Message)
+@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text.lower() == "live music":
         buttons_template = ButtonsTemplate(
@@ -65,35 +65,61 @@ def handle_postback(event):
     if 'action=sel_date' in data:
         selected_date = event.postback.params['date']
         response_text = f"您選擇的日期是：{selected_date}"
+        state = 'date_selected'
     elif 'action=no_date' in data:
         selected_date = None
-        response_text = "不指定"
+        response_text = "不指定日期"
+        state = 'date_not_selected'
     else:
         response_text = "未知的動作"
+        state = None
     
-    buttons_template = ButtonsTemplate(
-        title='想找哪個地區呢？',
-        text='請選擇地區',
-        actions=[
-            MessageAction(
-                label='北部',
-                text='北部'
-            ),
-            MessageAction(
-                label='中部',
-                text='中部'
-            ),
-            MessageAction(
-                label='南部',
-                text='南部'
-            ),
-            MessageAction(
-                label='東部及離島',
-                text='東部及離島'
-            )
-        ]
-    )
-    
+    if state == 'date_selected':
+        buttons_template = ButtonsTemplate(
+            title='想找哪個地區呢？',
+            text='請選擇地區',
+            actions=[
+                MessageAction(
+                    label='北部',
+                    text=f'北部&{selected_date}'
+                ),
+                MessageAction(
+                    label='中部',
+                    text=f'中部&{selected_date}'
+                ),
+                MessageAction(
+                    label='南部',
+                    text=f'南部&{selected_date}'
+                ),
+                MessageAction(
+                    label='東部&離島',
+                    text=f'東部&{selected_date}'
+                )
+            ]
+        )
+    else:
+        buttons_template = ButtonsTemplate(
+            title='想找哪個地區呢？',
+            text='請選擇地區',
+            actions=[
+                MessageAction(
+                    label='北部',
+                    text='北部'
+                ),
+                MessageAction(
+                    label='中部',
+                    text='中部'
+                ),
+                MessageAction(
+                    label='南部',
+                    text='南部'
+                ),
+                MessageAction(
+                    label='東部&離島',
+                    text='東部&離島'
+                )
+            ]
+        )
     template_message = TemplateSendMessage(
         alt_text='選擇地區',
         template=buttons_template
@@ -152,10 +178,6 @@ def handle_location_message(event):
                                            QuickReplyButton(action=PostbackTemplateAction(label="連江縣", text="連江縣", data='B&連江縣'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
-    else:
-        # 對於其他消息簡單回覆
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
-    
     '''
     # 新版關鍵字搜尋（進DB query活動名稱欄位)
     elif re.match('找', message):
@@ -165,8 +187,10 @@ def handle_location_message(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
         else:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
+    else:
+        # 對於其他消息簡單回覆
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
     '''
-
 
 '''
 舊版關鍵字搜尋，都先註解掉
@@ -199,6 +223,7 @@ def handle_location_message(event):
                 ]))
         line_bot_api.reply_message(event.reply_token, confirm_message)
 '''
+
 
 # 當py檔案被直接執行時，__name__變數會是__main__，因此當此條件成立時，代表程式被當作主程式執行，而不是被當作模組引用。
 if __name__ == "__main__":
