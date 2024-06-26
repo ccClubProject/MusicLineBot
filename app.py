@@ -32,7 +32,7 @@ def callback():
         abort(400)
     return 'OK'
 
-@handler.add(MessageEvent, message=Sticker)
+@handler.add(MessageEvent, message=StickerMessage)
 def handle_message(event):
     try:
         if event.message.text.lower() == "live music":
