@@ -40,7 +40,7 @@ https://github.com/line/line-bot-sdk-python/tree/master
   <br> 我們主要用到就是Message Event（使用者傳訊息）、Postback event （使用者做postback action，例如：選擇日期時間）<br>
 https://developers.line.biz/en/reference/messaging-api/#webhook-event-objects
 
-- **Template系列**：傳訊息line先做好的template，有不同Template可用，Buttons, Confirm等等
+- **Template系列**：傳訊息line先做好的template，有不同Template可用，Buttons, Confirm等等，再使用TemplateSendMessage送出
 https://developers.line.biz/en/reference/messaging-api/#template-messages<br>
 https://github.com/line/line-bot-sdk-python/blob/master/linebot/models/template.py#L72
 
@@ -87,7 +87,8 @@ def handle_message(event):
             ]
         )
 
-        # 這裡是用TemplateSendMessage去傳訊息給使用者（再包buttons)，也有傳貼圖、傳地點等（StickerSendMessage、LocationSendMessage）
+        # 這裡是用TemplateSendMessage去傳訊息給使用者（再包buttons)，也可以用其他種SendMessage，每種帶的參數可能不同
+        # 有傳貼圖、傳地點等（StickerSendMessage、LocationSendMessage）
         template_message = TemplateSendMessage(
             alt_text='選擇日期和時間',
             template=buttons_template
