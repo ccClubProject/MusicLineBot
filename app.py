@@ -32,16 +32,32 @@ def callback():
         abort(400)
     return 'OK'
 
-@handler.add(MessageEvent, message=StickerMessage)
+@handler.add(MessageEvent, message=Message)
 def handle_message(event):
-    if event.message.packageId == "11538" and event.message.stickerId == "51626499":
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='right sticker'))
-    elif event.message.keywords == "Hello":
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='hello'))
-    elif event.message.type == "sticker":
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='sticker'))
+    if event.message.text.lower() == "live music":
+        buttons_template = ButtonsTemplate(
+            title='選擇日期',
+            text='請選擇',
+            actions=[
+                DatetimePickerTemplateAction(
+                    label='選擇日期',
+                    data='action=sel_date',
+                    mode='date'
+                ),
+                PostbackTemplateAction(
+                    label='不指定',
+                    data='action=no_date'
+                )
+            ]
+        )
+        template_message = TemplateSendMessage(
+            alt_text='選擇日期和時間',
+            template=buttons_template
+        )
+        line_bot_api.reply_message(event.reply_token, template_message)
+
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='fail'))
+        handle_location_message(event)
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
