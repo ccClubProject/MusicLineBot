@@ -32,32 +32,35 @@ def callback():
         abort(400)
     return 'OK'
 
-@handler.add(MessageEvent, message=TextMessage)
+@handler.add(MessageEvent, message=StickerMessage)
 def handle_message(event):
-    if event.message.text.lower() == "live music":
-        buttons_template = ButtonsTemplate(
-            title='選擇日期',
-            text='請選擇',
-            actions=[
-                DatetimePickerTemplateAction(
-                    label='選擇日期',
-                    data='action=sel_date',
-                    mode='date'
-                ),
-                PostbackTemplateAction(
-                    label='不指定',
-                    data='action=no_date'
-                )
-            ]
-        )
-        template_message = TemplateSendMessage(
-            alt_text='選擇日期和時間',
-            template=buttons_template
-        )
-        line_bot_api.reply_message(event.reply_token, template_message)
-
-    else:
-        handle_location_message(event)
+    try:
+        if event.message.text.lower() == "live music":
+            buttons_template = ButtonsTemplate(
+                title='選擇日期',
+                text='請選擇',
+                actions=[
+                    DatetimePickerTemplateAction(
+                        label='選擇日期',
+                        data='action=sel_date',
+                        mode='date'
+                    ),
+                    PostbackTemplateAction(
+                        label='不指定',
+                        data='action=no_date'
+                    )
+                ]
+            )
+            template_message = TemplateSendMessage(
+                alt_text='選擇日期和時間',
+                template=buttons_template
+            )
+            line_bot_api.reply_message(event.reply_token, template_message)
+    
+        elif event.message.packageId == 11538 and event.message.stickerId == 51626499:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='right sticker')
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='fail')
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
