@@ -56,7 +56,7 @@ https://github.com/line/line-bot-sdk-python/blob/master/linebot/models/send_mess
 ```
 @handler.add(MessageEvent, message=Message)
 # Flask 處理訊息的路由，這裏為只要是MessageEvent（使用者傳訊息）就走這條路處理，且不限message種類。
-# 例如如果是 (MessageEvent, message=**StickerMessage**) 那只有當使用者傳貼圖的時候，他才會走下面的邏輯判斷。
+# 例如如果是 (MessageEvent, message=StickerMessage) 那只有當使用者傳貼圖的時候，他才會走下面的邏輯判斷。
 # Event可以理解是使用者做的動作，像傳訊息MessageEvent,也有JoinEvent等（使用者把帳號加到群組），PostbackEvent（當使用者選取日期時間等等）
 
 
@@ -93,7 +93,7 @@ def handle_message(event):
             template=buttons_template
         )
 
-        # 回覆使用者用的，event.reply_token是帶token（認證）、第二個變數就是你要回傳的訊息
+        # 回覆使用者用的主要的程式碼，event.reply_token是帶token（認證）、第二個變數就是你要回傳的訊息
         # 只可使用一次（例如想要回使用者兩句話，不能複製兩行來使用）
         line_bot_api.reply_message(event.reply_token, template_message)
 
