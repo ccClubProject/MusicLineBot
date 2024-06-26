@@ -48,29 +48,6 @@ def get_token():
 def get_auth_header(token):
     return {"Authorization": "Bearer " + token}
 
-# 獲取藝術家的詳細信息，包括音樂類型
-def get_artist_info(artist_id, token):
-    url = f"https://api.spotify.com/v1/artists/{artist_id}"
-    headers = get_auth_header(token)
-    response = get(url, headers=headers)
-    if response.status_code == 200:
-        artist_info = response.json()
-        return artist_info
-    else:
-        return {}
-
-# 獲取曲目的詳細信息，包括音樂類型
-def get_track_info(track_id, token):
-    url = f"https://api.spotify.com/v1/tracks/{track_id}"
-    headers = get_auth_header(token)
-    response = get(url, headers=headers)
-    if response.status_code == 200:
-        track_info = response.json()
-        artist_id = track_info['artists'][0]['id']
-        return get_artist_info(artist_id, token)
-    else:
-        return None
-
 # 隨機推薦音樂
 def random_recommendations(token):
     url = "https://api.spotify.com/v1/recommendations"
@@ -105,8 +82,12 @@ def random_recommendations(token):
     }
     response = get(url, headers=headers, params=params)
     recommendations = response.json()
-    return recommendations
-
+    track_info = recommendations['tracks'][0]
+    track_name = track_info['name']
+    artist_name = track_info['artists'][0]['name']
+    track_url = track_info['external_urls']['spotify']
+    track_image_url = track_info['album']['images'][0]['url']
+    return f"Track:{track_name} artist:{artist_name} URL:{track_url} image:{track_image_url}"
 # 透過音樂類型尋找曲目
 def search_tracks_by_genre(genre, token):
     url = "https://api.spotify.com/v1/search"
@@ -118,8 +99,16 @@ def search_tracks_by_genre(genre, token):
     }
     response = get(url, headers=headers, params=params)
     if response.status_code == 200:
-        return response.json()['tracks']['items']
-    else:
-        return []
+        result = response.json()
+        if result['tracks']['items']:
+            track_info = result['tracks']['items'][0]
+            track_name = track_info['name']
+            artist_name = track_info['artists'][0]['name']
+            track_url = track_info['external_urls']['spotify']
+            track_image_url = track_info['album']['images'][0]['url']
 
-token = get_token()
+            return f"Track:{track_name} artist:{artist_name} URL:{track_url} image:{track_image_url}"
+        else:
+            return None
+    else:
+        return None
