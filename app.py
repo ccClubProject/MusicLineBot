@@ -33,6 +33,23 @@ def callback():
         abort(400)
     return 'OK'
 
+#測試套用template的日期選單
+
+from music_event_template import buttons_template
+
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    global selected_date
+    input_message = event.message.text
+    if input_message.lower() == "live music":
+
+        template_message = TemplateSendMessage(
+            alt_text='選擇日期和時間',
+            template = buttons_template
+        )
+        line_bot_api.reply_message(event.reply_token, template_message)
+
+'''
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global selected_date
@@ -58,7 +75,7 @@ def handle_message(event):
             template=buttons_template
         )
         line_bot_api.reply_message(event.reply_token, template_message)
-
+'''
     # 關鍵字搜尋（連至DB query活動名稱欄位)
     elif re.match('找', input_message):
         keyword = input_message.replace("找", "").strip()
