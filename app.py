@@ -298,7 +298,7 @@ def music(event):
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
-    elif event.message.text in ['流行音樂', '搖滾音樂', '嘻哈音樂', '電子音樂', '爵士音樂', '古典音樂', 'R&B和靈魂音樂', '鄉村音樂', '隨機推薦']:
+    elif event.message.text in ['流行音樂', '搖滾音樂', '嘻哈音樂', '電子音樂', '爵士音樂', '古典音樂', 'R&B和靈魂音樂', '鄉村音樂']:
         token = get_token()
         result = search_tracks_by_genre(event.message.text, token)
         if result:
@@ -310,6 +310,14 @@ def music(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text="抱歉，找不到相關曲目。")
+            )
+    elif event.message.text == '隨機推薦':
+        token = get_token()
+        result = random_recommendations(token)
+        if result:
+            line_bot_api.reply_message(
+                event.reply.token,
+                TextSendMessage(text=result)
             )
     else:
         line_bot_api.reply_message(
