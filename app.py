@@ -35,7 +35,7 @@ def callback():
 
 #測試套用template的日期選單
 
-from music_event_template import buttons_template
+from music_event_template.py import buttons_template
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
