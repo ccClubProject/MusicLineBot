@@ -6,13 +6,21 @@ from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
+from search_tracks import *
 import json
+
+# 引入backend資料庫相關自訂模組
+# from backend.build import *
 
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
 channel_secret = os.environ.get('channel_secret')
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
+
+
+# 使用backend模組，將爬蟲資料存進table
+# create_table()
 
 selected_date = None
 
