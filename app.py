@@ -12,31 +12,6 @@ import json
 # 引入backend資料庫相關自訂模組
 from backend.query_db import *
 
-'''
-# PostgreSQL connection details
-DATABASE_TYPE = 'postgresql'
-DBAPI = 'psycopg2'
-ENDPOINT = os.environ.get('db_endpoint')
-USER = os.environ.get('db_user')
-PASSWORD = os.environ.get('db_pwd')
-PORT = 5432
-DATABASE = os.environ.get('db_name')
-
-# Create SQLAlchemy engine
-engine = create_engine(f'{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}')
-
-
-# Reflect the table structure
-metadata = MetaData()
-metadata.reflect(bind=engine)
-
-# Get the table object
-tb_accupass = metadata.tables['tb_accupass']
-
-# Create a session
-Session = sessionmaker(bind=engine)
-'''
-
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
 channel_secret = os.environ.get('channel_secret')
@@ -84,7 +59,7 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, template_message)
 
-    # 關鍵字搜尋（進DB query活動名稱欄位)
+    # 關鍵字搜尋（連至DB query活動名稱欄位)
     elif re.match('找', input_message):
         keyword = input_message.replace("找", "").strip()
         search_result = search_events(keyword)
