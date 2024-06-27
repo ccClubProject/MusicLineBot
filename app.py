@@ -74,7 +74,7 @@ def handle_message(event):
             template=buttons_template
         )
         line_bot_api.reply_message(event.reply_token, template_message)
-'''
+
     # 關鍵字搜尋（連至DB query活動名稱欄位)
     elif re.match('找', input_message):
         keyword = input_message.replace("找", "").strip()
@@ -85,7 +85,7 @@ def handle_message(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
     else:
         handle_location_message(event)
-
+'''
 @handler.add(PostbackEvent)
 def handle_postback(event):
     global selected_date
