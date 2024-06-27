@@ -12,7 +12,7 @@ import json
 # 引入backend資料庫相關自訂模組
 from backend.query_db import *
 
-
+'''
 # PostgreSQL connection details
 DATABASE_TYPE = 'postgresql'
 DBAPI = 'psycopg2'
@@ -35,7 +35,7 @@ tb_accupass = metadata.tables['tb_accupass']
 
 # Create a session
 Session = sessionmaker(bind=engine)
-
+'''
 
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
@@ -88,7 +88,7 @@ def handle_message(event):
     elif re.match('找', input_message):
         keyword = input_message.replace("找", "").strip()
         search_result = search_events(keyword)
-        if len(search_result) != 0:
+        if len(search_result) != 2:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
         else:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
