@@ -54,26 +54,68 @@ def handle_message(event):
     global selected_date
     input_message = event.message.text
     if input_message.lower() == "live music":
-        buttons_template = ButtonsTemplate(
-            title='選擇日期',
-            text='請選擇',
-            actions=[
-                DatetimePickerTemplateAction(
-                    label='選擇日期',
-                    data='action=sel_date',
-                    mode='date'
-                ),
-                PostbackTemplateAction(
-                    label='不指定',
-                    data='action=no_date'
-                )
-            ]
+        flex_message = FlexSendMessage(
+            alt_text="選擇日期",
+            contents={
+                "type": "bubble",
+                "hero": {
+                    "type": "image",
+                    "url": "https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=2013&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    "size": "full",
+                    "aspectRatio": "20:13",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type": "uri",
+                        "uri": "https://line.me/"
+                    }
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "想找什麼時間呢?",
+                            "weight": "bold",
+                            "size": "lg",
+                            "align": "center"
+                        }
+                    ]
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "spacing": "sm",
+                    "contents": [
+                        {
+                            "type": "button",
+                            "style": "link",
+                            "height": "sm",
+                            "action": {
+                                "type": "datetimepicker",
+                                "label": "選擇日期",
+                                "data": "action=sel_date",
+                                "mode": "date"
+                            },
+                            "color": "#FF4800"
+                        },
+                        {
+                            "type": "button",
+                            "style": "link",
+                            "height": "sm",
+                            "action": {
+                                "type": "postback",
+                                "label": "不指定",
+                                "data": "action=no_date"
+                            },
+                            "color": "#FF4800"
+                        }
+                    ],
+                    "flex": 0
+                }
+            }
         )
-        template_message = TemplateSendMessage(
-            alt_text='選擇日期和時間',
-            template=buttons_template
-        )
-        line_bot_api.reply_message(event.reply_token, template_message)
+        line_bot_api.reply_message(event.reply_token, flex_message)
 
     # 關鍵字搜尋（連至DB query活動名稱欄位)
     elif re.match('找', input_message):
@@ -103,36 +145,97 @@ def handle_postback(event):
         response_text = "未知的動作"
 
     if 'action=sel_date' in data or 'action=no_date' in data:
-        buttons_template = ButtonsTemplate(
-            title='想找哪個地區呢？',
-            text='請選擇地區',
-            actions=[
-                MessageAction(
-                    label='北部',
-                    text='北部'
-                ),
-                MessageAction(
-                    label='中部',
-                    text='中部'
-                ),
-                MessageAction(
-                    label='南部',
-                    text='南部'
-                ),
-                MessageAction(
-                    label='東部及離島',
-                    text='東部及離島'
-                )
-            ]
-        )
-        template_message = TemplateSendMessage(
-            alt_text='選擇地區',
-            template=buttons_template
+        flex_message = FlexSendMessage(
+            alt_text="選擇地區",
+            contents={
+                "type": "bubble",
+                "hero": {
+                    "type": "image",
+                    "url": "https://images.unsplash.com/photo-1489641493513-ba4ee84ccea9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    "size": "full",
+                    "aspectRatio": "20:13",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type": "uri",
+                        "uri": "https://line.me/"
+                    }
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "想找哪個地區呢?",
+                            "weight": "bold",
+                            "size": "lg",
+                            "align": "center"
+                        }
+                    ]
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "spacing": "sm",
+                    "contents": [
+                        {
+                        "type": "button",
+                        "style": "link",
+                        "height": "sm",
+                        "action": {
+                            "type": "message",
+                            "label": "北部",
+                            "text": "北部"
+                        },
+                        "color": "#FF4800"
+                    },
+                    {
+                        "type": "button",
+                        "style": "link",
+                        "height": "sm",
+                        "action": {
+                            "type": "message",
+                            "label": "中部",
+                            "text": "中部"
+                    },
+                    "color": "#FF4800"
+                    },
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "message",
+                            "label": "南部",
+                            "text": "南部"
+                    },
+                    "color": "#FF4800"
+                    },
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "message",
+                            "label": "東部 & 離島",
+                            "text": "東部 & 離島"
+                    },
+                    "color": "#FF4800"
+                    },
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "postback",
+                            "label": "不指定",
+                            "text": f'不指定&date={selected_date}'
+                    },
+                    "color": "#FF4800"
+                    }
+                ],
+                "flex": 0
+                }
+            }
         )
         line_bot_api.reply_message(
             event.reply_token, [
                 TextSendMessage(text=response_text),
-                template_message
+                flex_message
             ]
         )
     else:
@@ -176,8 +279,8 @@ def handle_location_message(event):
                                            QuickReplyButton(action=PostbackTemplateAction(label="屏東縣", data=f'屏東縣&date={selected_date}'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
-    elif re.match('東部及離島', message):
-        flex_message = TextSendMessage(text='你在東部及離島的哪個縣市呢？',
+    elif re.match('東部&離島', message):
+        flex_message = TextSendMessage(text='你在東部&離島的哪個縣市呢？',
                                        quick_reply=QuickReply(items=[
                                            QuickReplyButton(action=PostbackTemplateAction(label="花蓮縣", data=f'花蓮縣&date={selected_date}')),
                                            QuickReplyButton(action=PostbackTemplateAction(label="台東縣", data=f'台東縣&date={selected_date}')),
