@@ -57,7 +57,7 @@ buttons_template =  {
                             "flex": 0
                         }
                         }
-
+'''
 #選地點泡泡
 {
   "type": "bubble",
@@ -427,4 +427,4 @@ def event_carousel(alt_text,image_url_table,event_name_table,date_table,location
 
 
 #關鍵字搜尋泡泡
-         
+'''         
