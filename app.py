@@ -218,15 +218,6 @@ def handle_postback(event):
                     },
                     "color": "#FF4800"
                     },
-                    {
-                        "type": "button",
-                        "action": {
-                            "type": "postback",
-                            "label": "不指定",
-                            "text": f'不指定&date={selected_date}'
-                    },
-                    "color": "#FF4800"
-                    }
                 ],
                 "flex": 0
                 }
@@ -289,10 +280,6 @@ def handle_location_message(event):
                                            QuickReplyButton(action=PostbackTemplateAction(label="連江縣", data=f'連江縣&date={selected_date}'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
-
-    elif re.match('不指定', message):
-        response_text = "不指定地區"
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=response_text))
 
 '''
 以下是嘗試跟Music_event_template串接
