@@ -1,5 +1,5 @@
 #選日期泡泡 
-buttons_template =  {
+buttons_template = {
     "type": "bubble",
     "hero": {
         "type": "image",
@@ -8,21 +8,21 @@ buttons_template =  {
         "aspectRatio": "20:13",
         "aspectMode": "cover",
         "action": {
-        "type": "uri",
-        "uri": "https://line.me/"
+            "type": "uri",
+            "uri": "https://line.me/"
         }
     },
     "body": {
         "type": "box",
         "layout": "vertical",
         "contents": [
-        {
-            "type": "text",
-            "text": "想找什麼時間呢?",
-            "weight": "bold",
-            "size": "lg",
-            "align": "center"
-        }
+            {
+                "type": "text",
+                "text": "想找什麼時間呢?",
+                "weight": "bold",
+                "size": "lg",
+                "align": "center"
+            }
         ]
     },
     "footer": {
@@ -30,33 +30,34 @@ buttons_template =  {
         "layout": "vertical",
         "spacing": "sm",
         "contents": [
-        {
-            "type": "button",
-            "style": "link",
-            "height": "sm",
-            "action": {
-            "type": "datetimepicker",
-            "label": "選擇日期",
-            "data": "action=sel_date",
-            "mode": "date"
+            {
+                "type": "button",
+                "style": "link",
+                "height": "sm",
+                "action": {
+                    "type": "datetimepicker",
+                    "label": "選擇日期",
+                    "data": "action=sel_date",
+                    "mode": "date"
+                },
+                "color": "#FF4800"
             },
-            "color": "#FF4800"
-        },
-        {
-            "type": "button",
-            "style": "link",
-            "height": "sm",
-            "action": {
-            "type": "message",
-            "label": "不指定",
-            "text": "不指定"
-            },
-            "color": "#FF4800"
-        }
+            {
+                "type": "button",
+                "style": "link",
+                "height": "sm",
+                "action": {
+                    "type": "message",
+                    "label": "不指定",
+                    "text": "不指定"
+                },
+                "color": "#FF4800"
+            }
         ],
         "flex": 0
     }
-    }
+}
+
   '''
   #選地點泡泡
   {
