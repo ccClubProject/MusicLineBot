@@ -33,7 +33,7 @@ def search_events(keyword):
         # Example query: Get EventName where EventName contains the keyword
         query = session.query(tb_accupass.c.EventName).filter(tb_accupass.c.EventName.like(f'%{keyword}%'))
         results = query.all()
-        return results
+        return str(results)
     finally:
         session.close()
 
