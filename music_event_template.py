@@ -1,4 +1,4 @@
-#選日期泡泡 
+#選日期泡泡
 buttons_template = {
     "type": "bubble",
     "hero": {
