@@ -1,148 +1,148 @@
 #選日期泡泡 
 buttons_template =  {
-                        "type": "bubble",
-                        "hero": {
-                            "type": "image",
-                            "url": "https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=2013&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                            "size": "full",
-                            "aspectRatio": "20:13",
-                            "aspectMode": "cover",
-                            "action": {
-                            "type": "uri",
-                            "uri": "https://line.me/"
-                            }
-                        },
-                        "body": {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [
-                            {
-                                "type": "text",
-                                "text": "想找什麼時間呢?",
-                                "weight": "bold",
-                                "size": "lg",
-                                "align": "center"
-                            }
-                            ]
-                        },
-                        "footer": {
-                            "type": "box",
-                            "layout": "vertical",
-                            "spacing": "sm",
-                            "contents": [
-                            {
-                                "type": "button",
-                                "style": "link",
-                                "height": "sm",
-                                "action": {
-                                "type": "datetimepicker",
-                                "label": "選擇日期",
-                                "data": "action=sel_date",
-                                "mode": "date"
-                                },
-                                "color": "#FF4800"
-                            },
-                            {
-                                "type": "button",
-                                "style": "link",
-                                "height": "sm",
-                                "action": {
-                                "type": "message",
-                                "label": "不指定",
-                                "text": "不指定"
-                                },
-                                "color": "#FF4800"
-                            }
-                            ],
-                            "flex": 0
-                        }
-                        }
-'''
-#選地點泡泡
-{
-  "type": "bubble",
-  "hero": {
-    "type": "image",
-    "url": "https://images.unsplash.com/photo-1489641493513-ba4ee84ccea9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "size": "full",
-    "aspectRatio": "20:13",
-    "aspectMode": "cover",
-    "action": {
-      "type": "uri",
-      "uri": "https://line.me/"
+    "type": "bubble",
+    "hero": {
+        "type": "image",
+        "url": "https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=2013&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "size": "full",
+        "aspectRatio": "20:13",
+        "aspectMode": "cover",
+        "action": {
+        "type": "uri",
+        "uri": "https://line.me/"
+        }
+    },
+    "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+        {
+            "type": "text",
+            "text": "想找什麼時間呢?",
+            "weight": "bold",
+            "size": "lg",
+            "align": "center"
+        }
+        ]
+    },
+    "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+        {
+            "type": "button",
+            "style": "link",
+            "height": "sm",
+            "action": {
+            "type": "datetimepicker",
+            "label": "選擇日期",
+            "data": "action=sel_date",
+            "mode": "date"
+            },
+            "color": "#FF4800"
+        },
+        {
+            "type": "button",
+            "style": "link",
+            "height": "sm",
+            "action": {
+            "type": "message",
+            "label": "不指定",
+            "text": "不指定"
+            },
+            "color": "#FF4800"
+        }
+        ],
+        "flex": 0
     }
-  },
-  "body": {
-    "type": "box",
-    "layout": "vertical",
-    "contents": [
-      {
-        "type": "text",
-        "text": "想找哪個地區呢?",
-        "weight": "bold",
-        "size": "lg",
-        "align": "center"
+    }
+  '''
+  #選地點泡泡
+  {
+    "type": "bubble",
+    "hero": {
+      "type": "image",
+      "url": "https://images.unsplash.com/photo-1489641493513-ba4ee84ccea9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "size": "full",
+      "aspectRatio": "20:13",
+      "aspectMode": "cover",
+      "action": {
+        "type": "uri",
+        "uri": "https://line.me/"
       }
-    ]
-  },
-  "footer": {
-    "type": "box",
-    "layout": "vertical",
-    "spacing": "sm",
-    "contents": [
-      {
-        "type": "button",
-        "style": "link",
-        "height": "sm",
-        "action": {
-          "type": "message",
-          "label": "北部",
-          "text": "北部"
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "想找哪個地區呢?",
+          "weight": "bold",
+          "size": "lg",
+          "align": "center"
+        }
+      ]
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
+        {
+          "type": "button",
+          "style": "link",
+          "height": "sm",
+          "action": {
+            "type": "message",
+            "label": "北部",
+            "text": "北部"
+          },
+          "color": "#FF4800"
         },
-        "color": "#FF4800"
-      },
-      {
-        "type": "button",
-        "style": "link",
-        "height": "sm",
-        "action": {
-          "type": "message",
-          "label": "中部",
-          "text": "中部"
+        {
+          "type": "button",
+          "style": "link",
+          "height": "sm",
+          "action": {
+            "type": "message",
+            "label": "中部",
+            "text": "中部"
+          },
+          "color": "#FF4800"
         },
-        "color": "#FF4800"
-      },
-      {
-        "type": "button",
-        "action": {
-          "type": "message",
-          "label": "南部",
-          "text": "南部"
+        {
+          "type": "button",
+          "action": {
+            "type": "message",
+            "label": "南部",
+            "text": "南部"
+          },
+          "color": "#FF4800"
         },
-        "color": "#FF4800"
-      },
-      {
-        "type": "button",
-        "action": {
-          "type": "message",
-          "label": "東部 & 離島",
-          "text": "東部 & 離島"
+        {
+          "type": "button",
+          "action": {
+            "type": "message",
+            "label": "東部 & 離島",
+            "text": "東部 & 離島"
+          },
+          "color": "#FF4800"
         },
-        "color": "#FF4800"
-      },
-      {
-        "type": "button",
-        "action": {
-          "type": "message",
-          "label": "不指定",
-          "text": "不指定"
-        },
-        "color": "#FF4800"
-      }
-    ],
-    "flex": 0
+        {
+          "type": "button",
+          "action": {
+            "type": "message",
+            "label": "不指定",
+            "text": "不指定"
+          },
+          "color": "#FF4800"
+        }
+      ],
+      "flex": 0
+    }
   }
-}
 
 #活動推薦泡泡
 def event_carousel(alt_text,image_url_table,event_name_table,date_table,location_table,page_url_table,google_url_table,start_index=0):
