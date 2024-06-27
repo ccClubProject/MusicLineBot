@@ -11,10 +11,10 @@ import json
 
 # 引入backend資料庫相關自訂模組
 from backend.query_db import *
-
+'''
 # 引入template自訂模組
 from music_event_template import *
-
+'''
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
 channel_secret = os.environ.get('channel_secret')
@@ -35,7 +35,7 @@ def callback():
         app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
     return 'OK'
-
+'''
 #測試套用template的日期選單
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -47,8 +47,8 @@ def handle_message(event):
             template = buttons_template
         )
         line_bot_api.reply_message(event.reply_token, template_message)
-
 '''
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global selected_date
@@ -85,7 +85,7 @@ def handle_message(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
     else:
         handle_location_message(event)
-'''
+
 @handler.add(PostbackEvent)
 def handle_postback(event):
     global selected_date
