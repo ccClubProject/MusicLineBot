@@ -233,30 +233,7 @@ else:
                 ]))
         line_bot_api.reply_message(event.reply_token, confirm_message)
 '''
-'''
-# from flask import Flask, request, abort
-# from linebot import LineBotApi, WebhookHandler
-# from linebot.exceptions import InvalidSignatureError
-# from linebot.models import *
-# from search_tracks import *
 
-# app = Flask(__name__)
-# load_dotenv()
-# channel_access_token = os.getenv('channel_access_token')
-# channel_secret = os.getenv('channel_secret')
-# line_bot_api = LineBotApi(channel_access_token)
-# handler = WebhookHandler(channel_secret)
-
-# @app.route("/callback", methods=['POST'])
-# def callback():
-#     signature = request.headers['X-Line-Signature']
-#     body = request.get_data(as_text=True)
-#     app.logger.info("Request body: " + body)
-#     try:
-#         handler.handle(body, signature)
-#     except InvalidSignatureError:
-#         abort(400)
-#     return 'OK'
 
 # @handler.add(MessageEvent, message=TextMessage)
 # def music(event):
