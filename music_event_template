@@ -47,10 +47,9 @@
         "style": "link",
         "height": "sm",
         "action": {
-          "type": "datetimepicker",
+          "type": "message",
           "label": "不指定",
-          "data": "action=no_date",
-          "mode": "date"
+          "text": "不指定"
         },
         "color": "#FF4800"
       }
