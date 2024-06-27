@@ -87,7 +87,14 @@ def random_recommendations(token):
     artist_name = track_info['artists'][0]['name']
     track_url = track_info['external_urls']['spotify']
     track_image_url = track_info['album']['images'][0]['url']
-    return f"Track:{track_name} artist:{artist_name} URL:{track_url} image:{track_image_url}"
+    # 輸出字典格式
+    output = {
+        'title': track_name,
+        'artist': artist_name,
+        'image_url': track_image_url,
+        'details_url': track_url
+    }
+    return output
 # 透過音樂類型尋找曲目
 def search_tracks_by_genre(genre, token):
     url = "https://api.spotify.com/v1/search"
@@ -107,7 +114,14 @@ def search_tracks_by_genre(genre, token):
             track_url = track_info['external_urls']['spotify']
             track_image_url = track_info['album']['images'][0]['url']
 
-            return f"Track:{track_name} artist:{artist_name} URL:{track_url} image:{track_image_url}"
+            # 輸出字典格式
+            output = {
+                'title': track_name,
+                'artist': artist_name,
+                'image_url': track_image_url,
+                'details_url': track_url
+            }
+            return output
         else:
             return None
     else:
