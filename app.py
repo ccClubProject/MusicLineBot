@@ -42,7 +42,6 @@ def handle_message(event):
     global selected_date
     input_message = event.message.text
     if input_message.lower() == "live music":
-
         template_message = TemplateSendMessage(
             alt_text='選擇日期和時間',
             template = buttons_template
