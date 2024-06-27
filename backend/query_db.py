@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, String, DateTime
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
+import os
 
 
 # PostgreSQL connection details
