@@ -213,8 +213,8 @@ def handle_postback(event):
                         "type": "button",
                         "action": {
                             "type": "message",
-                            "label": "東部 & 離島",
-                            "text": "東部 & 離島"
+                            "label": "東部&離島",
+                            "text": "東部&離島"
                     },
                     "color": "#FF4800"
                     },
@@ -270,7 +270,7 @@ def handle_location_message(event):
                                            QuickReplyButton(action=PostbackTemplateAction(label="屏東縣", data=f'屏東縣&date={selected_date}'))
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
-    elif re.match('東部&離島', message):
+    elif re.match('東部', message):
         flex_message = TextSendMessage(text='你在東部&離島的哪個縣市呢？',
                                        quick_reply=QuickReply(items=[
                                            QuickReplyButton(action=PostbackTemplateAction(label="花蓮縣", data=f'花蓮縣&date={selected_date}')),
