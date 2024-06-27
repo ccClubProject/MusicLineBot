@@ -12,6 +12,9 @@ import json
 # 引入backend資料庫相關自訂模組
 from backend.query_db import *
 
+# 引入template自訂模組
+from music_event_template import *
+
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
 channel_secret = os.environ.get('channel_secret')
@@ -34,9 +37,6 @@ def callback():
     return 'OK'
 
 #測試套用template的日期選單
-
-from music_event_template import buttons_template
-
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global selected_date
