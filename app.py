@@ -12,6 +12,31 @@ import json
 # 引入backend資料庫相關自訂模組
 from backend.query_db import *
 
+
+# PostgreSQL connection details
+DATABASE_TYPE = 'postgresql'
+DBAPI = 'psycopg2'
+ENDPOINT = os.environ.get('db_endpoint')
+USER = os.environ.get('db_user')
+PASSWORD = os.environ.get('db_pwd')
+PORT = 5432
+DATABASE = os.environ.get('db_name')
+
+# Create SQLAlchemy engine
+engine = create_engine(f'{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}')
+
+
+# Reflect the table structure
+metadata = MetaData()
+metadata.reflect(bind=engine)
+
+# Get the table object
+tb_accupass = metadata.tables['tb_accupass']
+
+# Create a session
+Session = sessionmaker(bind=engine)
+
+
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
 channel_secret = os.environ.get('channel_secret')
@@ -289,4 +314,5 @@ def music(event):
 
 # 當py檔案被直接執行時，__name__變數會是__main__，因此當此條件成立時，代表程式被當作主程式執行，而不是被當作模組引用。
 if __name__ == "__main__":
+    # port = int(os.environ.get('PORT', 5000))
     app.run()
