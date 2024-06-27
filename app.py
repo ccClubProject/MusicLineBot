@@ -290,6 +290,10 @@ def handle_location_message(event):
                                        ]))
         line_bot_api.reply_message(event.reply_token, flex_message)
 
+    elif re.match('不指定', message):
+        response_text = "不指定地區"
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=response_text))
+
 '''
 以下是嘗試跟Music_event_template串接
 待處理:
