@@ -279,25 +279,59 @@ else:
 @handler.add(MessageEvent, message=TextMessage)
 def music(event):
     if event.message.text == "來點新鮮的":
-        buttons_template = TemplateSendMessage(
+        carousel_template = TemplateSendMessage(
             alt_text='請選擇音樂類型',
-            template=ButtonsTemplate(
-                title='請選擇音樂類型',
-                text='你想要聽哪種類型的音樂？',
-                actions=[
-                    MessageAction(label='流行音樂', text='流行音樂'),
-                    MessageAction(label='搖滾音樂', text='搖滾音樂'),
-                    MessageAction(label='嘻哈音樂', text='嘻哈音樂'),
-                    MessageAction(label='電子音樂', text='電子音樂'),
-                    MessageAction(label='爵士音樂', text='爵士音樂'),
-                    MessageAction(label='古典音樂', text='古典音樂'),
-                    MessageAction(label='R&B和靈魂音樂', text='R&B和靈魂音樂'),
-                    MessageAction(label='鄉村音樂', text='鄉村音樂'),
-                    MessageAction(label='隨機推薦', text='隨機推薦')
+            template=CarouselTemplate(
+                columns=[
+                    CarouselColumn(
+                        title='流行音樂',
+                        text='點選以收聽流行音樂',
+                        actions=[MessageAction(label='流行音樂', text='流行音樂')]
+                    ),
+                    CarouselColumn(
+                        title='搖滾音樂',
+                        text='點選以收聽搖滾音樂',
+                        actions=[MessageAction(label='搖滾音樂', text='搖滾音樂')]
+                    ),
+                    CarouselColumn(
+                        title='嘻哈音樂',
+                        text='點選以收聽嘻哈音樂',
+                        actions=[MessageAction(label='嘻哈音樂', text='嘻哈音樂')]
+                    ),
+                    CarouselColumn(
+                        title='電子音樂',
+                        text='點選以收聽電子音樂',
+                        actions=[MessageAction(label='電子音樂', text='電子音樂')]
+                    ),
+                    CarouselColumn(
+                        title='爵士音樂',
+                        text='點選以收聽爵士音樂',
+                        actions=[MessageAction(label='爵士音樂', text='爵士音樂')]
+                    ),
+                    CarouselColumn(
+                        title='古典音樂',
+                        text='點選以收聽古典音樂',
+                        actions=[MessageAction(label='古典音樂', text='古典音樂')]
+                    ),
+                    CarouselColumn(
+                        title='R&B和靈魂音樂',
+                        text='點選以收聽R&B和靈魂音樂',
+                        actions=[MessageAction(label='R&B和靈魂音樂', text='R&B和靈魂音樂')]
+                    ),
+                    CarouselColumn(
+                        title='鄉村音樂',
+                        text='點選以收聽鄉村音樂',
+                        actions=[MessageAction(label='鄉村音樂', text='鄉村音樂')]
+                    ),
+                    CarouselColumn(
+                        title='隨機推薦',
+                        text='點選以獲得隨機推薦',
+                        actions=[MessageAction(label='隨機推薦', text='隨機推薦')]
+                    )
                 ]
             )
         )
-        line_bot_api.reply_message(event.reply_token, buttons_template)
+        line_bot_api.reply_message(event.reply_token, carousel_template)
     elif event.message.text in ['流行音樂', '搖滾音樂', '嘻哈音樂', '電子音樂', '爵士音樂', '古典音樂', 'R&B和靈魂音樂', '鄉村音樂']:
         token = get_token()
         result = search_tracks_by_genre(event.message.text, token)
@@ -316,7 +350,7 @@ def music(event):
         result = random_recommendations(token)
         if result:
             line_bot_api.reply_message(
-                event.reply.token,
+                event.reply_token,
                 TextSendMessage(text=result)
             )
     else:
