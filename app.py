@@ -276,6 +276,30 @@ else:
         line_bot_api.reply_message(event.reply_token, confirm_message)
 '''
 
+from flask import Flask, request, abort
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import *
+from search_tracks import *
+
+app = Flask(__name__)
+load_dotenv()
+channel_access_token = os.getenv('channel_access_token')
+channel_secret = os.getenv('channel_secret')
+line_bot_api = LineBotApi(channel_access_token)
+handler = WebhookHandler(channel_secret)
+
+@app.route("/callback", methods=['POST'])
+def callback():
+    signature = request.headers['X-Line-Signature']
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+    return 'OK'
+
 @handler.add(MessageEvent, message=TextMessage)
 def music(event):
     if event.message.text == "來點新鮮的":
@@ -334,12 +358,26 @@ def music(event):
         line_bot_api.reply_message(event.reply_token, carousel_template)
     elif event.message.text in ['流行音樂', '搖滾音樂', '嘻哈音樂', '電子音樂', '爵士音樂', '古典音樂', 'R&B和靈魂音樂', '鄉村音樂']:
         token = get_token()
-        result = search_tracks_by_genre(event.message.text, token)
-        if result:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=result)
+        tracks = search_tracks_by_genre(event.message.text, token)
+        if tracks:
+            # 曲目資訊
+            columns = []
+            for track in tracks:
+                columns.append(
+                    CarouselColumn(
+                        thumbnail_image_url=track['image_url'],
+                        title=track['title'],
+                        text=track['artist'],
+                        actions=[
+                            URIAction(label='詳細資訊', uri=track['details_url'])
+                        ]
+                    )
+                )
+            carousel_template = TemplateSendMessage(
+                alt_text='選擇曲目',
+                template=CarouselTemplate(columns=columns)
             )
+            line_bot_api.reply_message(event.reply_token, carousel_template)
         else:
             line_bot_api.reply_message(
                 event.reply_token,
@@ -347,17 +385,37 @@ def music(event):
             )
     elif event.message.text == '隨機推薦':
         token = get_token()
-        result = random_recommendations(token)
-        if result:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=result)
+        tracks = random_recommendations(token)
+        if tracks:
+            # 曲目資訊
+            columns = []
+            for track in tracks:
+                columns.append(
+                    CarouselColumn(
+                        thumbnail_image_url=track['image_url'],
+                        title=track['title'],
+                        text=track['artist'],
+                        actions=[
+                            URIAction(label='詳細資訊', uri=track['details_url'])
+                        ]
+                    )
+                )
+            carousel_template = TemplateSendMessage(
+                alt_text='選擇曲目',
+                template=CarouselTemplate(columns=columns)
             )
+            line_bot_api.reply_message(event.reply_token, carousel_template)
     else:
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="抱歉，我不太了解你的需求。")
         )
+
+
+
+
+
+
 # 當py檔案被直接執行時，__name__變數會是__main__，因此當此條件成立時，代表程式被當作主程式執行，而不是被當作模組引用。
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
