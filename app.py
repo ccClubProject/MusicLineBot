@@ -10,7 +10,7 @@ from linebot.models import *
 import json
 
 # 引入backend資料庫相關自訂模組
-# from backend.build import *
+from backend.query_db import *
 
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
@@ -18,9 +18,6 @@ channel_secret = os.environ.get('channel_secret')
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-
-# 使用backend模組，將爬蟲資料存進table
-# create_table()
 
 selected_date = None
 
@@ -39,7 +36,8 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global selected_date
-    if event.message.text.lower() == "live music":
+    input_message = event.message.text
+    if input_message.lower() == "live music":
         buttons_template = ButtonsTemplate(
             title='選擇日期',
             text='請選擇',
@@ -60,6 +58,15 @@ def handle_message(event):
             template=buttons_template
         )
         line_bot_api.reply_message(event.reply_token, template_message)
+
+    # 關鍵字搜尋（進DB query活動名稱欄位)
+    elif re.match('找', input_message):
+        keyword = input_message.replace("找", "").strip()
+        search_result = search_events(keyword)
+        if len(search_result) != 0:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
+        else:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
     else:
         handle_location_message(event)
 
@@ -188,140 +195,96 @@ def handle_postback(event):
         line_bot_api.reply_message(event.reply_token, message)
 '''
 
-'''
-# 新版關鍵字搜尋（進DB query活動名稱欄位)
-elif re.match('找', message):
-    keyword = message.replace("找", "").strip()
-    search_result = get_data(keyword)
-    if len(search_result) != 2:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
+
+
+''' 來點新鮮的
+@handler.add(MessageEvent, message=TextMessage)
+def music(event):
+    if event.message.text == "來點新鮮的":
+        carousel_template = TemplateSendMessage(
+            alt_text='請選擇音樂類型',
+            template=CarouselTemplate(
+                columns=[
+                    CarouselColumn(
+                        title='流行音樂',
+                        text='點選以收聽流行音樂',
+                        actions=[MessageAction(label='流行音樂', text='流行音樂')]
+                    ),
+                    CarouselColumn(
+                        title='搖滾音樂',
+                        text='點選以收聽搖滾音樂',
+                        actions=[MessageAction(label='搖滾音樂', text='搖滾音樂')]
+                    ),
+                    CarouselColumn(
+                        title='嘻哈音樂',
+                        text='點選以收聽嘻哈音樂',
+                        actions=[MessageAction(label='嘻哈音樂', text='嘻哈音樂')]
+                    ),
+                    CarouselColumn(
+                        title='電子音樂',
+                        text='點選以收聽電子音樂',
+                        actions=[MessageAction(label='電子音樂', text='電子音樂')]
+                    ),
+                    CarouselColumn(
+                        title='爵士音樂',
+                        text='點選以收聽爵士音樂',
+                        actions=[MessageAction(label='爵士音樂', text='爵士音樂')]
+                    ),
+                    CarouselColumn(
+                        title='古典音樂',
+                        text='點選以收聽古典音樂',
+                        actions=[MessageAction(label='古典音樂', text='古典音樂')]
+                    ),
+                    CarouselColumn(
+                        title='R&B和靈魂音樂',
+                        text='點選以收聽R&B和靈魂音樂',
+                        actions=[MessageAction(label='R&B和靈魂音樂', text='R&B和靈魂音樂')]
+                    ),
+                    CarouselColumn(
+                        title='鄉村音樂',
+                        text='點選以收聽鄉村音樂',
+                        actions=[MessageAction(label='鄉村音樂', text='鄉村音樂')]
+                    ),
+                    CarouselColumn(
+                        title='隨機推薦',
+                        text='點選以獲得隨機推薦',
+                        actions=[MessageAction(label='隨機推薦', text='隨機推薦')]
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, carousel_template)
+    elif event.message.text in ['流行音樂', '搖滾音樂', '嘻哈音樂', '電子音樂', '爵士音樂', '古典音樂', 'R&B和靈魂音樂', '鄉村音樂']:
+        token = get_token()
+        # 輸出為字典格式
+        track = search_tracks_by_genre(event.message.text, token)
+        if track:
+            # 曲目資訊
+            columns = []
+            columns.append(CarouselColumn(thumbnail_image_url=track['image_url'], title=track['title'], text=track['artist'], actions=[URIAction(label='詳細資訊', uri=track['details_url'])]))
+            carousel_template = TemplateSendMessage(alt_text='選擇曲目', template=CarouselTemplate(columns=columns))
+            line_bot_api.reply_message(event.reply_token, carousel_template)
+        else:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="抱歉，找不到相關曲目。")
+            )
+    elif event.message.text == '隨機推薦':
+        token = get_token()
+        track = random_recommendations(token)
+        if track:
+            # 曲目資訊
+            columns = []
+            columns.append(
+                CarouselColumn(thumbnail_image_url=track['image_url'], title=track['title'], text=track['artist'],
+                               actions=[URIAction(label='詳細資訊', uri=track['details_url'])]))
+            carousel_template = TemplateSendMessage(alt_text='選擇曲目', template=CarouselTemplate(columns=columns))
+            line_bot_api.reply_message(event.reply_token, carousel_template)
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
-else:
-    # 對於其他消息簡單回覆
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
-'''
-
-'''
-舊版關鍵字搜尋，都先註解掉
-    #關鍵字搜尋
-    elif re.match('找', message):
-        search = message.replace("找", "").strip()
-        search_word = search.encode("utf-8")
-        search_url_indievox = f"https://www.indievox.com/activity/list/{urllib.parse.quote(search_word)}"
-        search_url_kktix = f"https://kktix.com/events?utf8=%E2%9C%93&search={urllib.parse.quote(search_word)}&start_at=2024%2F06%2F22"
-        search_url_accupass = f"https://www.accupass.com/search?q={urllib.parse.quote(search_word)}"
-        search_url_tixcraft = f"https://tixcraft.com/activity/{urllib.parse.quote(search_word)}"
-        confirm_message = TemplateSendMessage(
-            alt_text='點擊連結前往搜尋結果',
-            template=ButtonsTemplate(
-                title=f"{search}搜尋結果出爐！",
-                text=f"點擊按鈕看{search}有哪些好活動",
-                actions=[
-                    URIAction(
-                        label='馬上前往iNDEIVOX',
-                        uri=search_url_indievox),
-                    URIAction(
-                        label='馬上前往kktix',
-                        uri=search_url_kktix),
-                    URIAction(
-                        label='馬上前往Accupass',
-                        uri=search_url_accupass),
-                    URIAction(
-                        label='馬上前往Tixcraft',
-                        uri=search_url_tixcraft)
-                ]))
-        line_bot_api.reply_message(event.reply_token, confirm_message)
-'''
-
-
-# @handler.add(MessageEvent, message=TextMessage)
-# def music(event):
-#     if event.message.text == "來點新鮮的":
-#         carousel_template = TemplateSendMessage(
-#             alt_text='請選擇音樂類型',
-#             template=CarouselTemplate(
-#                 columns=[
-#                     CarouselColumn(
-#                         title='流行音樂',
-#                         text='點選以收聽流行音樂',
-#                         actions=[MessageAction(label='流行音樂', text='流行音樂')]
-#                     ),
-#                     CarouselColumn(
-#                         title='搖滾音樂',
-#                         text='點選以收聽搖滾音樂',
-#                         actions=[MessageAction(label='搖滾音樂', text='搖滾音樂')]
-#                     ),
-#                     CarouselColumn(
-#                         title='嘻哈音樂',
-#                         text='點選以收聽嘻哈音樂',
-#                         actions=[MessageAction(label='嘻哈音樂', text='嘻哈音樂')]
-#                     ),
-#                     CarouselColumn(
-#                         title='電子音樂',
-#                         text='點選以收聽電子音樂',
-#                         actions=[MessageAction(label='電子音樂', text='電子音樂')]
-#                     ),
-#                     CarouselColumn(
-#                         title='爵士音樂',
-#                         text='點選以收聽爵士音樂',
-#                         actions=[MessageAction(label='爵士音樂', text='爵士音樂')]
-#                     ),
-#                     CarouselColumn(
-#                         title='古典音樂',
-#                         text='點選以收聽古典音樂',
-#                         actions=[MessageAction(label='古典音樂', text='古典音樂')]
-#                     ),
-#                     CarouselColumn(
-#                         title='R&B和靈魂音樂',
-#                         text='點選以收聽R&B和靈魂音樂',
-#                         actions=[MessageAction(label='R&B和靈魂音樂', text='R&B和靈魂音樂')]
-#                     ),
-#                     CarouselColumn(
-#                         title='鄉村音樂',
-#                         text='點選以收聽鄉村音樂',
-#                         actions=[MessageAction(label='鄉村音樂', text='鄉村音樂')]
-#                     ),
-#                     CarouselColumn(
-#                         title='隨機推薦',
-#                         text='點選以獲得隨機推薦',
-#                         actions=[MessageAction(label='隨機推薦', text='隨機推薦')]
-#                     )
-#                 ]
-#             )
-#         )
-#         line_bot_api.reply_message(event.reply_token, carousel_template)
-#     elif event.message.text in ['流行音樂', '搖滾音樂', '嘻哈音樂', '電子音樂', '爵士音樂', '古典音樂', 'R&B和靈魂音樂', '鄉村音樂']:
-#         token = get_token()
-#         # 輸出為字典格式
-#         track = search_tracks_by_genre(event.message.text, token)
-#         if track:
-#             # 曲目資訊
-#             columns = []
-#             columns.append(CarouselColumn(thumbnail_image_url=track['image_url'], title=track['title'], text=track['artist'], actions=[URIAction(label='詳細資訊', uri=track['details_url'])]))
-#             carousel_template = TemplateSendMessage(alt_text='選擇曲目', template=CarouselTemplate(columns=columns))
-#             line_bot_api.reply_message(event.reply_token, carousel_template)
-#         else:
-#             line_bot_api.reply_message(
-#                 event.reply_token,
-#                 TextSendMessage(text="抱歉，找不到相關曲目。")
-#             )
-#     elif event.message.text == '隨機推薦':
-#         token = get_token()
-#         track = random_recommendations(token)
-#         if track:
-#             # 曲目資訊
-#             columns = []
-#             columns.append(
-#                 CarouselColumn(thumbnail_image_url=track['image_url'], title=track['title'], text=track['artist'],
-#                                actions=[URIAction(label='詳細資訊', uri=track['details_url'])]))
-#             carousel_template = TemplateSendMessage(alt_text='選擇曲目', template=CarouselTemplate(columns=columns))
-#             line_bot_api.reply_message(event.reply_token, carousel_template)
-#     else:
-#         line_bot_api.reply_message(
-#             event.reply_token,
-#             TextSendMessage(text="抱歉，我不太了解你的需求。")
-#         )
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="抱歉，我不太了解你的需求。")
+        )
 '''
 
 # 當py檔案被直接執行時，__name__變數會是__main__，因此當此條件成立時，代表程式被當作主程式執行，而不是被當作模組引用。
