@@ -63,13 +63,26 @@ all_info = info_search_by_name("小提琴")
 # info會是 <class 'sqlalchemy.engine.row.Row'>
 # info.EventName 會是str
 for info in all_info:
-    print(type(info))
     print(info.EventName)
     print(info.EventTime)
     print(info.Venue)
     print(info.Address)
     print(info.PageURL)
     print(info.ImageURL)
+
+印出範例：
+鳴石樂集樂壇新秀《琴恩飛揚》王唯恩小提琴獨奏會
+2024/07/20 (Sat) 19:30 - 21:00
+鳴石音樂空間
+台灣台北市100中正區仁愛路二段34號5F
+https://www.accupass.com/event/2403091016294643336910?utm_source=web&utm_medium=search_result_&utm_campaign=accu_e_
+https://static.accupass.com/eventbanner/2406072310565290498870.jpg
+鳴石樂集樂壇新秀《昕昕相惜》 吳昕叡小提琴獨奏會
+2024/07/06 (Sat) 19:30 - 21:00
+鳴石音樂空間
+台灣台北市100中正區仁愛路二段34號5F
+https://www.accupass.com/event/2308160154011909123190?utm_source=web&utm_medium=search_result_&utm_campaign=accu_e_
+https://static.accupass.com/eventbanner/2406030950273424381960.jpg
 '''
 
 
