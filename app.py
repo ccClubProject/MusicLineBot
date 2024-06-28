@@ -80,11 +80,11 @@ def handle_postback(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="沒有找到相關的展演活動。"))
             return
 
-        image_url_table = [info['Imageurl'] for info in search_all_info]
+        image_url_table = [info['ImageUrl'] for info in search_all_info]
         event_name_table = [info['EventName'] for info in search_all_info]
         date_table = [info['StartTime'].strftime('%Y-%m-%d') for info in search_all_info]
         location_table = [info['Address'] for info in search_all_info]
-        page_url_table = [info['Pageurl'] for info in search_all_info]
+        page_url_table = [info['PageUrl'] for info in search_all_info]
         google_url_table = [f"https://www.google.com/maps/search/?api=1&query={urllib.parse.quote(info['Address'])}" for info in search_all_info]
 
         flex_message = event_carousel(
