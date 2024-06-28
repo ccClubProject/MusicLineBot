@@ -98,9 +98,13 @@ def random_recommendations(token):
     }
     return output
 # 透過音樂類型尋找曲目
-def search_tracks_by_genre(genre, token,limit=1, offset=0):
+def search_tracks_by_genre(genre, token, limit=1):
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
+
+    # 隨機生成 offset 值
+    offset = random.randint(0, 100)
+
     params = {
         'q': f'genre:"{genre}"',
         'type': 'track',
@@ -129,11 +133,3 @@ def search_tracks_by_genre(genre, token,limit=1, offset=0):
             return None
     else:
         return None
-
-token = get_token()
-
-genre = input("音樂類型: ")
-# 每次查詢增加offset值
-offset = random.randint(0, 100)  # 隨機生成一個0到100的整數作為offset值
-track = search_tracks_by_genre(genre, token,offset=offset)
-print(track)
