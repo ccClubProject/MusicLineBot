@@ -23,10 +23,10 @@ location_bubble={
         "weight": "bold",
         "size": "lg",
         "align": "center",
-        "margin": "sm"
+        "margin": "sm",
+        "offsetTop": "5px"
       }
-    ],
-    "height": "50px"
+    ]
   },
   "footer": {
     "type": "box",
