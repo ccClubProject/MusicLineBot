@@ -13,7 +13,7 @@ import json
 from backend.query_db import *
 
 # 引入template自訂模組
-from music_event_template import buttons_template
+from message_template.picktime_bubble import time_bubble
 
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
@@ -44,7 +44,8 @@ def handle_message(event):
     if input_message.lower() == "live music":
         flex_message = FlexSendMessage(
             alt_text="選擇日期",
-            contents=buttons_template)
+            contents=time_bubble
+        )
         line_bot_api.reply_message(event.reply_token, flex_message)
 
 #     # 關鍵字搜尋（連至DB query活動名稱欄位)
