@@ -23,12 +23,12 @@ time_bubble = {
         "weight": "bold",
         "size": "lg",
         "align": "center",
-        "margin": "sm"
+        "margin": "none",
+        "offsetTop": "5px"
       }
     ],
     "margin": "none",
-    "spacing": "none",
-    "height": "50px"
+    "spacing": "none"
   },
   "footer": {
     "type": "box",
