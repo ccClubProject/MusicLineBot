@@ -96,19 +96,19 @@ def random_recommendations(token):
     }
     return output
 # 透過音樂類型尋找曲目
-def search_tracks_by_genre(genre, token):
+def search_tracks_by_genre(genre, token,limit=10):
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
     params = {
         'q': f'genre:"{genre}"',
         'type': 'track',
-        'limit': 1
+        'limit': limit
     }
     response = get(url, headers=headers, params=params)
     if response.status_code == 200:
         result = response.json()
         if result['tracks']['items']:
-            track_info = result['tracks']['items'][0]
+            track_info = random.choice(result['tracks']['items'])
             track_name = track_info['name']
             artist_name = track_info['artists'][0]['name']
             track_url = track_info['external_urls']['spotify']
