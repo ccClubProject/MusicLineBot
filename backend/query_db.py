@@ -1,8 +1,7 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, String, DateTime
+from sqlalchemy import create_engine, MetaData, Table, Column, String, DateTime, and_
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 import os
-
 
 # PostgreSQL connection details
 DATABASE_TYPE = 'postgresql'
@@ -84,6 +83,37 @@ https://static.accupass.com/eventbanner/2406072310565290498870.jpg
 https://www.accupass.com/event/2308160154011909123190?utm_source=web&utm_medium=search_result_&utm_campaign=accu_e_
 https://static.accupass.com/eventbanner/2406030950273424381960.jpg
 '''
+
+
+# 用時間+地點搜尋，返回活動全部資訊（名字、時間、展演空間、地址、圖片網址、活動網頁）
+# 時間格式為 YYYY-MM-DD
+def info_search_by_time_city(time,city):
+    session = Session()
+
+    filters = []
+    # 若時間為不指定就只針對縣市搜尋
+    if time == None:
+        filters.append(tb_accupass.c.Address.like(f'%{city}%'))
+    # 若有指定時間就加上時間條件
+    elif time != None:
+        filters.append(and_(tb_accupass.c.StartTime <= time, tb_accupass.c.EndTime >= time, tb_accupass.c.Address.like(f'%{city}%')))
+
+    try:
+        query = session.query(
+            tb_accupass.c.EventName,
+            tb_accupass.c.EventTime,
+            tb_accupass.c.Venue,
+            tb_accupass.c.Address,
+            tb_accupass.c.ImageURL,
+            tb_accupass.c.PageURL,
+        # '*' is for unpacking the filters list into separate arguments for the and_ function
+        ).filter(and_(*filters))
+        results = query.all()
+        return results
+    finally:
+        session.close()
+
+# test = info_search_by_time_city(None,"台北市")
 
 
 
