@@ -103,6 +103,8 @@ def info_search_by_time_city(time, city):
             tb_accupass.c.Address,
             tb_accupass.c.ImageURL,
             tb_accupass.c.PageURL,
+            tb_accupass.c.StartTime,
+            tb_accupass.c.EndTime
         ).filter(and_(*filters))
         results = query.all()
 
@@ -115,6 +117,8 @@ def info_search_by_time_city(time, city):
                 'Address': result[3],
                 'ImageURL': result[4],
                 'PageURL': result[5],
+                'StartTime': result[6],
+                'EndTime': result[7],
             }
             for result in results
         ]
