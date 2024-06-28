@@ -318,42 +318,42 @@ def music(event):
                     CarouselColumn(
                         title='流行音樂',
                         text='點選以收聽流行音樂',
-                        actions=[MessageAction(label='流行音樂', text='流行音樂')]
+                        actions=[MessageAction(label='流行音樂', text='Pop')]
                     ),
                     CarouselColumn(
                         title='搖滾音樂',
                         text='點選以收聽搖滾音樂',
-                        actions=[MessageAction(label='搖滾音樂', text='搖滾音樂')]
+                        actions=[MessageAction(label='搖滾音樂', text='Rock')]
                     ),
                     CarouselColumn(
                         title='嘻哈音樂',
                         text='點選以收聽嘻哈音樂',
-                        actions=[MessageAction(label='嘻哈音樂', text='嘻哈音樂')]
+                        actions=[MessageAction(label='嘻哈音樂', text='Hip Hop/Rap')]
                     ),
                     CarouselColumn(
                         title='電子音樂',
                         text='點選以收聽電子音樂',
-                        actions=[MessageAction(label='電子音樂', text='電子音樂')]
+                        actions=[MessageAction(label='電子音樂', text='Electronic/Dance')]
                     ),
                     CarouselColumn(
                         title='爵士音樂',
                         text='點選以收聽爵士音樂',
-                        actions=[MessageAction(label='爵士音樂', text='爵士音樂')]
+                        actions=[MessageAction(label='爵士音樂', text='Jazz')]
                     ),
                     CarouselColumn(
                         title='古典音樂',
                         text='點選以收聽古典音樂',
-                        actions=[MessageAction(label='古典音樂', text='古典音樂')]
+                        actions=[MessageAction(label='古典音樂', text='Classical')]
                     ),
                     CarouselColumn(
                         title='R&B和靈魂音樂',
                         text='點選以收聽R&B和靈魂音樂',
-                        actions=[MessageAction(label='R&B和靈魂音樂', text='R&B和靈魂音樂')]
+                        actions=[MessageAction(label='R&B和靈魂音樂', text='R&B/Soul')]
                     ),
                     CarouselColumn(
                         title='鄉村音樂',
                         text='點選以收聽鄉村音樂',
-                        actions=[MessageAction(label='鄉村音樂', text='鄉村音樂')]
+                        actions=[MessageAction(label='鄉村音樂', text='Country')]
                     ),
                     CarouselColumn(
                         title='隨機推薦',
@@ -364,7 +364,7 @@ def music(event):
             )
         )
         line_bot_api.reply_message(event.reply_token, carousel_template)
-    elif event.message.text in ['流行音樂', '搖滾音樂', '嘻哈音樂', '電子音樂', '爵士音樂', '古典音樂', 'R&B和靈魂音樂', '鄉村音樂']:
+    elif event.message.text in ['Pop', 'Rock', 'Hip Hop/Rap', 'Electronic/Dance', 'Jazz', 'Classical', 'R&B/Soul', 'Country']:
         token = get_token()
         # 輸出為字典格式
         track = search_tracks_by_genre(event.message.text, token)
