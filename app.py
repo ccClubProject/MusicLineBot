@@ -44,7 +44,7 @@ def handle_message(event):
     if input_message.lower() == "live music":
         flex_message = FlexSendMessage(
             alt_text="選擇日期",
-            contents=buttons_template
+            contents=buttons_template)
         line_bot_api.reply_message(event.reply_token, flex_message)
 
 #     # 關鍵字搜尋（連至DB query活動名稱欄位)
