@@ -4,6 +4,8 @@ import base64  # 用於對客戶端ID和密鑰進編碼
 import json  # 解析JSON
 from requests import post, get  # 發送HTTP請求
 import random
+import random
+
 # 加載 .env 文件中的環境變量
 load_dotenv()
 # 讀取密鑰
@@ -96,19 +98,20 @@ def random_recommendations(token):
     }
     return output
 # 透過音樂類型尋找曲目
-def search_tracks_by_genre(genre, token,limit=10):
+def search_tracks_by_genre(genre, token,limit=1, offset=0):
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
     params = {
         'q': f'genre:"{genre}"',
         'type': 'track',
-        'limit': limit
+        'limit': limit,
+        'offset': offset
     }
     response = get(url, headers=headers, params=params)
     if response.status_code == 200:
         result = response.json()
         if result['tracks']['items']:
-            track_info = random.choice(result['tracks']['items'])
+            track_info = result['tracks']['items'][0]
             track_name = track_info['name']
             artist_name = track_info['artists'][0]['name']
             track_url = track_info['external_urls']['spotify']
@@ -126,3 +129,11 @@ def search_tracks_by_genre(genre, token,limit=10):
             return None
     else:
         return None
+
+token = get_token()
+
+genre = input("音樂類型: ")
+# 每次查詢增加offset值
+offset = random.randint(0, 100)  # 隨機生成一個0到100的整數作為offset值
+track = search_tracks_by_genre(genre, token,offset=offset)
+print(track)
