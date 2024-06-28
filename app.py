@@ -82,7 +82,7 @@ def handle_postback(event):
 
         image_url_table = [info['ImageURL'] for info in search_all_info]
         event_name_table = [info['EventName'] for info in search_all_info]
-        date_table = [info['StartTime'].strftime('%Y-%m-%d') for info in search_all_info]
+        date_table = [info['StartTime'] for info in search_all_info]
         location_table = [info['Address'] for info in search_all_info]
         page_url_table = [info['PageURL'] for info in search_all_info]
         google_url_table = [f"https://www.google.com/maps/search/?api=1&query={urllib.parse.quote(info['Address'])}" for info in search_all_info]
