@@ -8,6 +8,7 @@ load_dotenv()
 # 從環境變量中讀取API密鑰
 google_map_api = os.getenv("GOOGLE_MAP_API")
 
+# 展演空間的「地址」
 def formatted__address(show_loc):
     # 「尋找地點」的url
     find_place_url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json"
@@ -26,7 +27,7 @@ def formatted__address(show_loc):
     else:
         return None
 
-
+# 展演空間的「經緯度」
 def lng_lat(show_loc):
     # 「尋找地點」的url
     find_place_url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json"
@@ -46,7 +47,7 @@ def lng_lat(show_loc):
     else:
         return None
 
-
+# 使用者裝置當下位置
 def current_loc():
     url = "https://www.googleapis.com/geolocation/v1/geolocate?key=" + google_map_api
     data = {"considerIp": "true"}
@@ -59,6 +60,7 @@ def current_loc():
     else:
         return None, None
 
+# 導航
 def route_planning():
     # 獲取用戶輸入
     show_loc = input("請輸入展演空間名稱:")
