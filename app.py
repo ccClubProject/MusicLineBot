@@ -236,7 +236,7 @@ def handle_postback(event):
 '''
 
 
-
+'''
 #來點新鮮的
 @handler.add(MessageEvent, message=TextMessage)
 def music(event):
@@ -337,7 +337,7 @@ def music(event):
             event.reply_token,
             TextSendMessage(text="抱歉，我不太了解你的需求。")
         )
-
+'''
 
 # 當py檔案被直接執行時，__name__變數會是__main__，因此當此條件成立時，代表程式被當作主程式執行，而不是被當作模組引用。
 if __name__ == "__main__":
