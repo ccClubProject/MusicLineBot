@@ -87,15 +87,12 @@ https://static.accupass.com/eventbanner/2406030950273424381960.jpg
 
 # 用時間+地點搜尋，返回活動全部資訊（名字、時間、展演空間、地址、圖片網址、活動網頁）
 # 時間格式為 YYYY-MM-DD
-def info_search_by_time_city(time,city):
+def info_search_by_time_city(time, city):
     session = Session()
-
     filters = []
-    # 若時間為不指定就只針對縣市搜尋
-    if time == None:
+    if time is None:
         filters.append(tb_accupass.c.Address.like(f'%{city}%'))
-    # 若有指定時間就加上時間條件
-    elif time != None:
+    else:
         filters.append(and_(tb_accupass.c.StartTime <= time, tb_accupass.c.EndTime >= time, tb_accupass.c.Address.like(f'%{city}%')))
 
     try:
@@ -106,13 +103,26 @@ def info_search_by_time_city(time,city):
             tb_accupass.c.Address,
             tb_accupass.c.ImageURL,
             tb_accupass.c.PageURL,
-        # '*' is for unpacking the filters list into separate arguments for the and_ function
         ).filter(and_(*filters))
         results = query.all()
-        return results
+
+        # 將查詢結果轉換成字典的列表
+        results_dicts = [
+            {
+                'EventName': result[0],
+                'EventTime': result[1],
+                'Venue': result[2],
+                'Address': result[3],
+                'ImageURL': result[4],
+                'PageURL': result[5],
+            }
+            for result in results
+        ]
+
+        return results_dicts
     finally:
         session.close()
-
+        
 # test = info_search_by_time_city(None,"台北市")
 
 
