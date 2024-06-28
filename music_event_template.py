@@ -57,7 +57,6 @@ buttons_template = {
                     "flex": 0
                 }
             }
-        )
 
   '''
   #選地點泡泡
