@@ -113,11 +113,11 @@ def handle_postback(event):
                 flex_message
             ]
         )
-    else:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=response_text)
-        )
+    # else:
+    #     line_bot_api.reply_message(
+    #         event.reply_token,
+    #         TextSendMessage(text=response_text)
+    #     )
 
 def handle_location_message(event):
     global selected_date
