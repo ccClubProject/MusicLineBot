@@ -1,4 +1,4 @@
-#選日期泡泡
+#選日期泡泡 
 time_bubble = {
   "type": "bubble",
   "size": "kilo",
