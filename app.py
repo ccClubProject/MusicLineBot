@@ -15,6 +15,7 @@ from backend.query_db import *
 # 引入template自訂模組
 from message_template.picktime_bubble import time_bubble
 from message_template.choose_location_bubble import location_bubble
+from message_template.event_bubbles import event_carousel
 
 app = Flask(__name__)
 channel_access_token = os.environ.get('channel_access_token')
@@ -70,11 +71,35 @@ def handle_postback(event):
     elif 'action=no_date' in data:
         selected_date = None
         response_text = "不指定日期"
+    
+    #輸入地點日期後從DB推薦活動
     elif 'date=' in data:
-        location, date = data.split('&date=')
-        response_text = f"您選擇的日期和地點是：{location},{date}"
+        city, date = data.split('&date=')
+        search_all_info = info_search_by_time_city(date, city)
+        if not search_all_info:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="沒有找到相關的展演活動。"))
+            return
+
+        image_url_table = [info['Imageurl'] for info in search_all_info]
+        event_name_table = [info['EventName'] for info in search_all_info]
+        date_table = [info['StartTime'].strftime('%Y-%m-%d') for info in search_all_info]
+        location_table = [info['Address'] for info in search_all_info]
+        page_url_table = [info['Pageurl'] for info in search_all_info]
+        google_url_table = [f"https://www.google.com/maps/search/?api=1&query={urllib.parse.quote(info['Address'])}" for info in search_all_info]
+
+        flex_message = event_carousel(
+            alt_text="推薦展演活動",
+            image_url_table=image_url_table,
+            event_name_table=event_name_table,
+            date_table=date_table,
+            location_table=location_table,
+            page_url_table=page_url_table,
+            google_url_table=google_url_table
+        )
+        line_bot_api.reply_message(event.reply_token, flex_message)
     else:
         response_text = "未知的動作"
+
 
     if 'action=sel_date' in data or 'action=no_date' in data:
         flex_message = FlexSendMessage(
