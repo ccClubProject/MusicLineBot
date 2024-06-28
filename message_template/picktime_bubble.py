@@ -1,5 +1,5 @@
 #選日期泡泡
-buttons_template = {
+time_bubble = {
                 "type": "bubble",
                 "hero": {
                     "type": "image",
