@@ -1,7 +1,7 @@
 #選日期泡泡
 time_bubble = {
   "type": "bubble",
-  "size": "hecto",
+  "size": "kilo",
   "hero": {
     "type": "image",
     "url": "https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=2013&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -23,7 +23,7 @@ time_bubble = {
         "weight": "bold",
         "size": "md",
         "align": "center",
-        "margin": "sm"
+        "margin": "md"
       }
     ],
     "margin": "none",
@@ -58,6 +58,7 @@ time_bubble = {
         },
         "color": "#FF4800"
       }
-    ]
+    ],
+    "margin": "none"
   }
 }
