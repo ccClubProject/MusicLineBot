@@ -21,14 +21,14 @@ time_bubble = {
         "type": "text",
         "text": "想找什麼時間呢?",
         "weight": "bold",
-        "size": "md",
+        "size": "lg",
         "align": "center",
-        "margin": "md"
+        "margin": "sm"
       }
     ],
     "margin": "none",
     "spacing": "none",
-    "height": "40px"
+    "height": "50px"
   },
   "footer": {
     "type": "box",
