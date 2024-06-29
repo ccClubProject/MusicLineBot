@@ -89,16 +89,12 @@ https://static.accupass.com/eventbanner/2406030950273424381960.jpg
 # 時間格式為 YYYY-MM-DD
 def info_search_by_time_city(time, city):
     session = Session()
-    filters = [tb_accupass.c.Address.like(f'%{city}%')]
     
-    if time:
-        filters.append(tb_accupass.c.StartTime <= time)
-        filters.append(tb_accupass.c.EndTime >= time)
-    # filters = []
-    # if time == None:
-    #     filters.append(tb_accupass.c.Address.like(f'%{city}%'))
-    # else:
-    #     filters.append(and_(tb_accupass.c.StartTime <= time, tb_accupass.c.EndTime >= time, tb_accupass.c.Address.like(f'%{city}%')))
+    filters = []
+    if time is None:
+        filters.append(tb_accupass.c.Address.like(f'%{city}%'))
+    else:
+        filters.append(and_(tb_accupass.c.StartTime <= time, tb_accupass.c.EndTime >= time, tb_accupass.c.Address.like(f'%{city}%')))
 
     try:
         query = session.query(
