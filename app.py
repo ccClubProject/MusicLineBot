@@ -44,6 +44,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global selected_date
+    global accepting_keyword_input
     input_message = event.message.text
     #選日期
     if input_message.lower() == "live music":
@@ -54,7 +55,6 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, flex_message)
 
     # 關鍵字搜尋（連至DB query活動名稱欄位)
-    global accepting_keyword_input
     elif re.match(r'^我想找', input_message):
         accepting_keyword_input = True
         reply_message = TextSendMessage(text="請輸入您想找的關鍵字")
