@@ -1,4 +1,3 @@
-
 import sqlite3
 import os
 import re
@@ -225,7 +224,6 @@ def handle_postback(event):
             page_url_table=page_url_table,
             google_url_table=google_url_table
         )
-        response_text = f"顯示更多活動，從第 {start_index + 1} 個開始。"
         line_bot_api.reply_message(event.reply_token, flex_message)
 
     # 顯示更多活動
@@ -243,6 +241,7 @@ def handle_postback(event):
             google_url_table=google_url_table[start_index:],
             start_index=start_index  # Start from the last displayed index
         )
+        response_text = f"顯示更多活動，從第 {start_index + 1} 個開始。"
         line_bot_api.reply_message(event.reply_token, flex_message)
     
     else:
