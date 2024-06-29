@@ -24,7 +24,8 @@ channel_secret = os.environ.get('channel_secret')
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-
+#關鍵字搜尋(預設關閉)
+accepting_keyword_input = False
 selected_date = None
 
 @app.route("/callback", methods=['POST'])
@@ -53,12 +54,20 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, flex_message)
 
     # 關鍵字搜尋（連至DB query活動名稱欄位)
+    global accepting_keyword_input
+    elif re.match(r'^我想找', input_message):
+        accepting_keyword_input = True
+        reply_message = TextSendMessage(text="請輸入您想找的關鍵字")
+        line_bot_api.reply_message(event.reply_token, reply_message)
+    
+    elif accepting_keyword_input:
+        keyword = input_message
+        accepting_keyword_input = False  # Reset flag after processing
 
-    elif re.match('我想找', input_message):
-        keyword = input_message.replace("我想找", "").strip()
         search_all_info = info_search_by_name(keyword)
         if not search_all_info:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="查無此活動！換個關鍵字吧！"))
+            reply_message = TextSendMessage(text="查無此活動！換個關鍵字吧！")
+            line_bot_api.reply_message(event.reply_token, reply_message)
             return
 
         image_url_table = [info['ImageURL'] for info in search_all_info]
