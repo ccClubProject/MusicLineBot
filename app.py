@@ -52,13 +52,39 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, flex_message)
 
     # 關鍵字搜尋（連至DB query活動名稱欄位)
-    elif re.match('找', input_message):
-        keyword = input_message.replace("找", "").strip()
-        search_result = search_events(keyword)
-        if len(search_result) != 2:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
-        else:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
+
+    elif re.match('我想找', input_message):
+        keyword = input_message.replace("我想找", "").strip()
+        search_all_info = info_search_by_name(keyword)
+        if not search_all_info:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="查無此活動！換個關鍵字吧！"))
+            return
+
+        image_url_table = [info['ImageURL'] for info in search_all_info]
+        event_name_table = [info['EventName'] for info in search_all_info]
+        date_table = [info['EventTime'] for info in search_all_info]
+        location_table = [info['Venue'] for info in search_all_info]
+        page_url_table = [info['PageURL'] for info in search_all_info]
+        google_url_table = [f"https://www.google.com/maps/search/?api=1&query={urllib.parse.quote(info['Address'])}" for info in search_all_info]
+
+        flex_message = event_carousel(
+            alt_text="推薦展演活動",
+            image_url_table=image_url_table,
+            event_name_table=event_name_table,
+            date_table=date_table,
+            location_table=location_table,
+            page_url_table=page_url_table,
+            google_url_table=google_url_table
+        )
+        line_bot_api.reply_message(event.reply_token, flex_message)
+
+    # elif re.match('找', input_message):
+    #     keyword = input_message.replace("找", "").strip()
+    #     search_result = search_events(keyword)
+    #     if len(search_result) != 2:
+    #         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
+    #     else:
+    #         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
     else:
         handle_location_message(event)
 
