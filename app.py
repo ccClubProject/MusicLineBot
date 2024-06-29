@@ -90,59 +90,20 @@ def handle_message(event):
 
     # 來點新鮮的
     elif event.message.text == "來點新鮮的":
-        carousel_template = TemplateSendMessage(
-            alt_text='請選擇音樂類型',
-            template=CarouselTemplate(
-                columns=[
-                    CarouselColumn(
-                        title='流行音樂',
-                        text='點選以收聽流行音樂',
-                        actions=[MessageAction(label='流行音樂', text='Pop')]
-                    ),
-                    CarouselColumn(
-                        title='搖滾音樂',
-                        text='點選以收聽搖滾音樂',
-                        actions=[MessageAction(label='搖滾音樂', text='Rock')]
-                    ),
-                    CarouselColumn(
-                        title='嘻哈音樂',
-                        text='點選以收聽嘻哈音樂',
-                        actions=[MessageAction(label='嘻哈音樂', text='Hip Hop/Rap')]
-                    ),
-                    CarouselColumn(
-                        title='電子音樂',
-                        text='點選以收聽電子音樂',
-                        actions=[MessageAction(label='電子音樂', text='Electronic/Dance')]
-                    ),
-                    CarouselColumn(
-                        title='爵士音樂',
-                        text='點選以收聽爵士音樂',
-                        actions=[MessageAction(label='爵士音樂', text='Jazz')]
-                    ),
-                    CarouselColumn(
-                        title='古典音樂',
-                        text='點選以收聽古典音樂',
-                        actions=[MessageAction(label='古典音樂', text='Classical')]
-                    ),
-                    CarouselColumn(
-                        title='R&B和靈魂音樂',
-                        text='點選以收聽R&B和靈魂音樂',
-                        actions=[MessageAction(label='R&B和靈魂音樂', text='R&B/Soul')]
-                    ),
-                    CarouselColumn(
-                        title='鄉村音樂',
-                        text='點選以收聽鄉村音樂',
-                        actions=[MessageAction(label='鄉村音樂', text='Country')]
-                    ),
-                    CarouselColumn(
-                        title='隨機推薦',
-                        text='點選以獲得隨機推薦',
-                        actions=[MessageAction(label='隨機推薦', text='隨機推薦')]
-                    )
-                ]
-            )
-        )
-        line_bot_api.reply_message(event.reply_token, carousel_template)
+        flex_message = TextSendMessage(text='想收聽什麼類型的音樂呢？',
+                                       quick_reply=QuickReply(items=[
+                                           QuickReplyButton(action=MessageAction(label="流行音樂", text="Pop")),
+                                           QuickReplyButton(action=MessageAction(label="搖滾音樂", text="Rock")),
+                                           QuickReplyButton(action=MessageAction(label="嘻哈音樂", text="Hip Hop/Rap")),
+                                           QuickReplyButton(action=MessageAction(label="電子音樂", text="Electronic/Dance")),
+                                           QuickReplyButton(action=MessageAction(label="爵士音樂", text="Jazz")),
+                                           QuickReplyButton(action=MessageAction(label="古典音樂", text="Classical")),
+                                           QuickReplyButton(action=MessageAction(label="R&B和靈魂音樂", text="R&B/Soul")),
+                                           QuickReplyButton(action=MessageAction(label="鄉村音樂", text="Country")),
+                                           QuickReplyButton(action=MessageAction(label="隨機推薦", text="隨機推薦"))
+                                       ]))
+        line_bot_api.reply_message(event.reply_token, flex_message)
+        
     elif event.message.text in ['Pop', 'Rock', 'Hip Hop/Rap', 'Electronic/Dance', 'Jazz', 'Classical', 'R&B/Soul', 'Country']:
         token = get_token()
         # 輸出為字典格式
