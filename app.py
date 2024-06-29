@@ -66,7 +66,7 @@ def handle_message(event):
 
         search_all_info = info_search_by_name(keyword)
         if not search_all_info:
-            reply_message = TextSendMessage(text="查無此活動！換個關鍵字吧！")
+            reply_message = TextSendMessage(text="查無此活動！重新點選表單換個關鍵字吧！")
             line_bot_api.reply_message(event.reply_token, reply_message)
             return
 
@@ -87,6 +87,7 @@ def handle_message(event):
             google_url_table=google_url_table
         )
         line_bot_api.reply_message(event.reply_token, flex_message)
+
 
     # 來點新鮮的
     elif event.message.text == "來點新鮮的":
@@ -181,19 +182,7 @@ def handle_message(event):
                             uri=track['details_url'])])]
             carousel_template = TemplateSendMessage(alt_text='選擇曲目', template=CarouselTemplate(columns=columns))
             line_bot_api.reply_message(event.reply_token, carousel_template)
-    # else:
-    #     line_bot_api.reply_message(
-    #         event.reply_token,
-    #         TextSendMessage(text="抱歉，我不太了解你的需求。")
-    #     )
 
-    # elif re.match('找', input_message):
-    #     keyword = input_message.replace("找", "").strip()
-    #     search_result = search_events(keyword)
-    #     if len(search_result) != 2:
-    #         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=search_result))
-    #     else:
-    #         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='查無此活動！換個關鍵字吧！'))
     else:
         handle_location_message(event)
 
@@ -217,7 +206,7 @@ def handle_postback(event):
         
         search_all_info = info_search_by_time_city(time, city)
         if not search_all_info:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="沒有找到相關的展演活動。"))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="沒有找到相關的展演活動，試試其他日期或地點吧!"))
             return
 
         image_url_table = [info['ImageURL'] for info in search_all_info]
@@ -237,6 +226,24 @@ def handle_postback(event):
             google_url_table=google_url_table
         )
         line_bot_api.reply_message(event.reply_token, flex_message)
+
+    # 顯示更多活動
+    elif data.startswith('show_more,'):
+        start_index = int(data.split(',')[1])
+        
+        # Continue showing events from the last displayed index
+        flex_message = event_carousel(
+            alt_text="推薦展演活動",
+            image_url_table=image_url_table[start_index:],
+            event_name_table=event_name_table[start_index:],
+            date_table=date_table[start_index:],
+            location_table=location_table[start_index:],
+            page_url_table=page_url_table[start_index:],
+            google_url_table=google_url_table[start_index:],
+            start_index=start_index  # Start from the last displayed index
+        )
+        line_bot_api.reply_message(event.reply_token, flex_message)
+    
     else:
         response_text = "未知的動作"
 
