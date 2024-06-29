@@ -20,8 +20,8 @@ engine = create_engine(f'{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:
 metadata = MetaData()
 metadata.reflect(bind=engine)
 
-# Get the table object
-tb_accupass = metadata.tables['tb_accupass']
+# Get the view object
+vw_all_events = Table("vw_all_events", metadata, autoload_with=engine)
 
 # Create a session
 Session = sessionmaker(bind=engine)
@@ -31,7 +31,7 @@ def search_events(keyword):
     session = Session()
     try:
         # Example query: Get EventName where EventName contains the keyword
-        query = session.query(tb_accupass.c.EventName).filter(tb_accupass.c.EventName.like(f'%{keyword}%'))
+        query = session.query(vw_all_events.c.EventName).filter(vw_all_events.c.EventName.like(f'%{keyword}%'))
         results = query.all()
         return str(results)
     finally:
@@ -43,13 +43,13 @@ def info_search_by_name(keyword):
     session = Session()
     try:
         query = session.query(
-            tb_accupass.c.EventName,
-            tb_accupass.c.EventTime,
-            tb_accupass.c.Venue,
-            tb_accupass.c.Address,
-            tb_accupass.c.ImageURL,
-            tb_accupass.c.PageURL
-        ).filter(tb_accupass.c.EventName.like(f'%{keyword}%'))
+            vw_all_events.c.EventName,
+            vw_all_events.c.EventTime,
+            vw_all_events.c.Venue,
+            vw_all_events.c.Address,
+            vw_all_events.c.ImageURL,
+            vw_all_events.c.PageURL
+        ).filter(vw_all_events.c.EventName.like(f'%{keyword}%'))
         results = query.all()
 
         results_dicts = [
@@ -72,13 +72,13 @@ def info_search_by_name(keyword):
 #     session = Session()
 #     try:
 #         query = session.query(
-#             tb_accupass.c.EventName,
-#             tb_accupass.c.EventTime,
-#             tb_accupass.c.Venue,
-#             tb_accupass.c.Address,
-#             tb_accupass.c.ImageURL,
-#             tb_accupass.c.PageURL
-#         ).filter(tb_accupass.c.EventName.like(f'%{keyword}%'))
+#             vw_all_events.c.EventName,
+#             vw_all_events.c.EventTime,
+#             vw_all_events.c.Venue,
+#             vw_all_events.c.Address,
+#             vw_all_events.c.ImageURL,
+#             vw_all_events.c.PageURL
+#         ).filter(vw_all_events.c.EventName.like(f'%{keyword}%'))
 #         results = query.all()
 #         return results
 #     finally:
@@ -122,20 +122,20 @@ def info_search_by_time_city(time, city):
     
     filters = []
     if time is None:
-        filters.append(tb_accupass.c.Address.like(f'%{city}%'))
+        filters.append(vw_all_events.c.Address.like(f'%{city}%'))
     else:
-        filters.append(and_(tb_accupass.c.StartTime <= time, tb_accupass.c.EndTime >= time, tb_accupass.c.Address.like(f'%{city}%')))
+        filters.append(and_(vw_all_events.c.StartTime <= time, vw_all_events.c.EndTime >= time, vw_all_events.c.Address.like(f'%{city}%')))
 
     try:
         query = session.query(
-            tb_accupass.c.EventName,
-            tb_accupass.c.EventTime,
-            tb_accupass.c.Venue,
-            tb_accupass.c.Address,
-            tb_accupass.c.ImageURL,
-            tb_accupass.c.PageURL,
-            tb_accupass.c.StartTime,
-            tb_accupass.c.EndTime
+            vw_all_events.c.EventName,
+            vw_all_events.c.EventTime,
+            vw_all_events.c.Venue,
+            vw_all_events.c.Address,
+            vw_all_events.c.ImageURL,
+            vw_all_events.c.PageURL,
+            vw_all_events.c.StartTime,
+            vw_all_events.c.EndTime
         ).filter(and_(*filters))
         results = query.all()
 
