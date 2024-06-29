@@ -76,6 +76,7 @@ def handle_postback(event):
     #輸入地點日期後從DB推薦活動
     elif 'date=' in data:
         city, time = data.split('&date=')
+        time = time if time else None
         search_all_info = info_search_by_time_city(time, city)
         if not search_all_info:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="沒有找到相關的展演活動。"))
