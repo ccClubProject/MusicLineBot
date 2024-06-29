@@ -38,6 +38,7 @@ def search_events(keyword):
         session.close()
 
 # 用關鍵字搜尋活動名稱，返回活動全部資訊（名字、時間、展演空間、地址、圖片網址、活動網頁）
+
 def info_search_by_name(keyword):
     session = Session()
     try:
@@ -50,9 +51,38 @@ def info_search_by_name(keyword):
             tb_accupass.c.PageURL
         ).filter(tb_accupass.c.EventName.like(f'%{keyword}%'))
         results = query.all()
-        return results
+
+        results_dicts = [
+            {
+                'EventName': result[0],
+                'EventTime': result[1],
+                'Venue': result[2],
+                'Address': result[3],
+                'ImageURL': result[4],
+                'PageURL': result[5],
+            }
+            for result in results
+        ]
+
+        return results_dicts
     finally:
         session.close()
+        
+# def info_search_by_name(keyword):
+#     session = Session()
+#     try:
+#         query = session.query(
+#             tb_accupass.c.EventName,
+#             tb_accupass.c.EventTime,
+#             tb_accupass.c.Venue,
+#             tb_accupass.c.Address,
+#             tb_accupass.c.ImageURL,
+#             tb_accupass.c.PageURL
+#         ).filter(tb_accupass.c.EventName.like(f'%{keyword}%'))
+#         results = query.all()
+#         return results
+#     finally:
+#         session.close()
 
 '''
 # 使用方式，利用迴圈一一呼叫，再搭配資料庫欄位名稱印出
