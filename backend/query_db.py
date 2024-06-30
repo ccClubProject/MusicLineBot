@@ -126,11 +126,11 @@ def info_search_by_time_city(time, city):
     if time:
         # 條件1:時間有在任一StartTime裡面 或者 條件2:時間有介於StartTime,EndTime中間
         filters.append(or_(
-            func.cast(time, Date) == func.any(tb_test.c.StartTime),  # For date arrays
-            and_(time >= tb_test.c.StartTime, time <= tb_test.c.EndTime)  # For date ranges
+            func.cast(time, Date) == func.any(vw_all_events.c.StartTime),  # For date arrays
+            and_(time >= vw_all_events.c.StartTime, time <= vw_all_events.c.EndTime)  # For date ranges
         ))
     if city:
-        filters.append(tb_test.c.Address.like(f'%{city}%'))
+        filters.append(vw_all_events.c.Address.like(f'%{city}%'))
 
     try:
         query = session.query(
