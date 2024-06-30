@@ -240,7 +240,7 @@ def event_carousel(alt_text, image_url_table, event_name_table, date_table, loca
                                     "height": "40px",
                                     "action": {
                                         "type": "postback",
-                                        "data": f'show_more,{i+1}',
+                                        "data": f'show_more,{i}',
                                         "label": "推薦更多"
                                     }
                                 }
