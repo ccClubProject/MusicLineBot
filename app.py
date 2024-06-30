@@ -26,6 +26,12 @@ handler = WebhookHandler(channel_secret)
 #關鍵字搜尋(預設關閉)
 accepting_keyword_input = False
 selected_date = None
+image_url_table = []
+event_name_table = []
+date_table = []
+location_table = []
+page_url_table = []
+google_url_table = []
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -149,6 +155,7 @@ def handle_message(event):
 @handler.add(PostbackEvent)
 def handle_postback(event):
     global selected_date
+    global image_url_table, event_name_table, date_table, location_table, page_url_table, google_url_table
     data = event.postback.data
     if 'action=sel_date' in data:
         selected_date = event.postback.params['date']
