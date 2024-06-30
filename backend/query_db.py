@@ -1,5 +1,6 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, String, DateTime, and_
+from sqlalchemy import create_engine, MetaData, Table, Column, String, DateTime, and_, or_, func
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.types import Date
 from datetime import datetime
 import os
 
@@ -119,12 +120,17 @@ https://static.accupass.com/eventbanner/2406030950273424381960.jpg
 # 時間格式為 YYYY-MM-DD
 def info_search_by_time_city(time, city):
     session = Session()
+    time = "{" + f"{time}" + "}"
     
     filters = []
-    if time is None:
-        filters.append(vw_all_events.c.Address.like(f'%{city}%'))
-    else:
-        filters.append(and_(vw_all_events.c.StartTime <= time, vw_all_events.c.EndTime >= time, vw_all_events.c.Address.like(f'%{city}%')))
+    if time:
+        # 條件1:時間有在任一StartTime裡面 或者 條件2:時間有介於StartTime,EndTime中間
+        filters.append(or_(
+            func.cast(time, Date) == func.any(tb_test.c.StartTime),  # For date arrays
+            and_(time >= tb_test.c.StartTime, time <= tb_test.c.EndTime)  # For date ranges
+        ))
+    if city:
+        filters.append(tb_test.c.Address.like(f'%{city}%'))
 
     try:
         query = session.query(
