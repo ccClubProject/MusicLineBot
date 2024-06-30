@@ -120,7 +120,8 @@ https://static.accupass.com/eventbanner/2406030950273424381960.jpg
 # 時間格式為 YYYY-MM-DD
 def info_search_by_time_city(time, city):
     session = Session()
-    time = "{" + f"{time}" + "}"
+    if time != None:
+        time = "{" + f"{time}" + "}"
     
     filters = []
     if time:
