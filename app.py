@@ -202,13 +202,13 @@ def handle_postback(event):
         # Continue showing events from the last displayed index
         flex_message = event_carousel(
             alt_text="推薦展演活動",
-            image_url_table,
-            event_name_table,
-            date_table,
-            location_table,
-            page_url_table,
-            google_url_table,
-            start_index
+            image_url_table=image_url_table,
+            event_name_table=event_name_table,
+            date_table=date_table,
+            location_table=location_table,
+            page_url_table=page_url_table,
+            google_url_table=google_url_table,
+            start_index=start_index
         )
         line_bot_api.reply_message(event.reply_token, flex_message)
     
