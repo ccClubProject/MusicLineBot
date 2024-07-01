@@ -208,7 +208,6 @@ def handle_postback(event):
             location_table=location_table[start_index:],
             page_url_table=page_url_table[start_index:],
             google_url_table=google_url_table[start_index:],
-            start_index=start_index  # Start from the last displayed index
         )
         line_bot_api.reply_message(event.reply_token, flex_message)
     
