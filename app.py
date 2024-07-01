@@ -124,7 +124,7 @@ def handle_message(event):
                     text=track['artist'],
                     actions=[
                         URIAction(
-                            label='詳細資訊',
+                            label='前往Spotify聽聽看吧!',
                             uri=track['details_url'])])]
             carousel_template = TemplateSendMessage(alt_text='選擇曲目', template=CarouselTemplate(columns=columns))
             line_bot_api.reply_message(event.reply_token, carousel_template)
@@ -145,7 +145,7 @@ def handle_message(event):
                     text=track['artist'],
                     actions=[
                         URIAction(
-                            label='詳細資訊',
+                            label='前往Spotify聽聽看吧!',
                             uri=track['details_url'])])]
             carousel_template = TemplateSendMessage(alt_text='選擇曲目', template=CarouselTemplate(columns=columns))
             line_bot_api.reply_message(event.reply_token, carousel_template)
