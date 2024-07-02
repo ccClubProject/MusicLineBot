@@ -15,12 +15,13 @@ This is a linebot where users can search live music events based on given time a
 - /api > GoogleMapAPI, SpotifyAPI 函式
 - /scraping_local > 本機跑的爬蟲程式、以及儲存至Render PostgreSQL
 
-## Deploy Steps (正常情況下使用runtime python跑即可)
+## Deploy Steps
+註：正常情況下使用runtime python跑即可，如要在Render使用selenium需使用Docker，但速度太慢故捨棄改用地端跑爬蟲<br>
 1. Render > Deploy Web Services > Connect to your Github repo
 2. Deploy 設定都留預設即可
 3. 複製左上角網址，最後面要加上/callback (e.g. https://xxxx.onrender.com/callback)
 4. 到Line Developer > Messaging API > 更改 Webhook URL
-5. 只要你的repo有commit change, render會自動 re-deploy<br>
+5. 只要你的repo有commit change, render會自動 re-deploy
 
 ## Render Env Variable
 - 建議把較機密的資訊如API Key, DB URL存到Render env varialbe而不是放在code裡
