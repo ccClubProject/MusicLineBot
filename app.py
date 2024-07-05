@@ -51,6 +51,7 @@ def callback():
 def handle_message(event):
     global selected_date
     global accepting_keyword_input
+    global image_url_table, event_name_table, date_table, location_table, page_url_table, google_url_table
     input_message = event.message.text
     #選日期
     if input_message.lower() == "live music":
