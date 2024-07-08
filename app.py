@@ -23,11 +23,6 @@ channel_secret = os.environ.get('channel_secret')
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-#喚醒
-@app.route('/')
-def index():
-    return 'Hello, this is your Line Bot application!'
-
 #關鍵字搜尋(預設關閉)
 accepting_keyword_input = False
 selected_date = None
